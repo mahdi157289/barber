@@ -1,9 +1,28 @@
-import React, { useState } from 'react';
-import { Save } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Save, Check } from 'lucide-react';
 import { Button } from '../../components/common/Button';
+import { useData } from '../../context/DataContext';
 
 export const Settings = () => {
+  const { settings, updateSettings } = useData();
   const [activeTab, setActiveTab] = useState('general');
+  const [formData, setFormData] = useState(settings);
+  const [showSuccess, setShowSuccess] = useState(false);
+
+  useEffect(() => {
+    setFormData(settings);
+  }, [settings]);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleSave = () => {
+    updateSettings(formData);
+    setShowSuccess(true);
+    setTimeout(() => setShowSuccess(false), 3000);
+  };
 
   return (
     <div className="space-y-6">
@@ -12,9 +31,9 @@ export const Settings = () => {
           <h1 className="text-2xl font-serif text-white">Settings</h1>
           <p className="text-gray-400 text-sm">Configure your website and business settings</p>
         </div>
-        <Button variant="primary">
-          <Save size={18} className="mr-2" />
-          Save Changes
+        <Button variant="primary" onClick={handleSave}>
+          {showSuccess ? <Check size={18} className="mr-2" /> : <Save size={18} className="mr-2" />}
+          {showSuccess ? 'Saved!' : 'Save Changes'}
         </Button>
       </div>
 
@@ -45,7 +64,9 @@ export const Settings = () => {
               <label className="block text-sm text-gray-400 mb-1">Site Title</label>
               <input 
                 type="text" 
-                defaultValue="Elite Cuts Barbershop"
+                name="siteTitle"
+                value={formData.siteTitle}
+                onChange={handleInputChange}
                 className="w-full bg-dark/50 border border-white/10 rounded-lg px-4 py-2 text-white focus:border-gold focus:outline-none"
               />
             </div>
@@ -53,7 +74,9 @@ export const Settings = () => {
               <label className="block text-sm text-gray-400 mb-1">Tagline</label>
               <input 
                 type="text" 
-                defaultValue="Premium Grooming Experience"
+                name="tagline"
+                value={formData.tagline}
+                onChange={handleInputChange}
                 className="w-full bg-dark/50 border border-white/10 rounded-lg px-4 py-2 text-white focus:border-gold focus:outline-none"
               />
             </div>
@@ -68,7 +91,9 @@ export const Settings = () => {
               <label className="block text-sm text-gray-400 mb-1">Email Address</label>
               <input 
                 type="email" 
-                defaultValue="info@elitecuts.com"
+                name="email"
+                value={formData.email}
+                onChange={handleInputChange}
                 className="w-full bg-dark/50 border border-white/10 rounded-lg px-4 py-2 text-white focus:border-gold focus:outline-none"
               />
             </div>
@@ -76,7 +101,9 @@ export const Settings = () => {
               <label className="block text-sm text-gray-400 mb-1">Phone Number</label>
               <input 
                 type="tel" 
-                defaultValue="+1 (555) 123-4567"
+                name="phone"
+                value={formData.phone}
+                onChange={handleInputChange}
                 className="w-full bg-dark/50 border border-white/10 rounded-lg px-4 py-2 text-white focus:border-gold focus:outline-none"
               />
             </div>
@@ -84,7 +111,9 @@ export const Settings = () => {
               <label className="block text-sm text-gray-400 mb-1">Address</label>
               <input 
                 type="text" 
-                defaultValue="123 Barber Street, Luxury District, New York, NY 10001"
+                name="address"
+                value={formData.address}
+                onChange={handleInputChange}
                 className="w-full bg-dark/50 border border-white/10 rounded-lg px-4 py-2 text-white focus:border-gold focus:outline-none"
               />
             </div>
@@ -99,7 +128,9 @@ export const Settings = () => {
               <label className="block text-sm text-gray-400 mb-1">Instagram URL</label>
               <input 
                 type="text" 
-                defaultValue="https://instagram.com/elitecuts"
+                name="instagram"
+                value={formData.instagram}
+                onChange={handleInputChange}
                 className="w-full bg-dark/50 border border-white/10 rounded-lg px-4 py-2 text-white focus:border-gold focus:outline-none"
               />
             </div>
@@ -107,7 +138,29 @@ export const Settings = () => {
               <label className="block text-sm text-gray-400 mb-1">Facebook URL</label>
               <input 
                 type="text" 
-                defaultValue="https://facebook.com/elitecuts"
+                name="facebook"
+                value={formData.facebook}
+                onChange={handleInputChange}
+                className="w-full bg-dark/50 border border-white/10 rounded-lg px-4 py-2 text-white focus:border-gold focus:outline-none"
+              />
+            </div>
+            <div>
+              <label className="block text-sm text-gray-400 mb-1">TikTok URL</label>
+              <input 
+                type="text" 
+                name="tiktok"
+                value={formData.tiktok}
+                onChange={handleInputChange}
+                className="w-full bg-dark/50 border border-white/10 rounded-lg px-4 py-2 text-white focus:border-gold focus:outline-none"
+              />
+            </div>
+            <div>
+              <label className="block text-sm text-gray-400 mb-1">Twitter/X URL</label>
+              <input 
+                type="text" 
+                name="twitter"
+                value={formData.twitter}
+                onChange={handleInputChange}
                 className="w-full bg-dark/50 border border-white/10 rounded-lg px-4 py-2 text-white focus:border-gold focus:outline-none"
               />
             </div>

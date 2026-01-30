@@ -63,6 +63,8 @@ export const ImportedChair = (props: React.ComponentProps<'group'>) => {
              
              if (name.includes('seat') || name.includes('cushion') || name.includes('leather') || name.includes('back') || name.includes('pad') || name.includes('upholstery')) {
                 mesh.material = leatherMaterial;
+            } else if (name.includes('lever') || name.includes('handle') || name.includes('manette') || name.includes('pedal') || name.includes('adjust')) {
+                mesh.material = blackMaterial;
             } else if (name.includes('base') || name.includes('pump') || name.includes('chrome') || name.includes('metal') || name.includes('steel')) {
                  mesh.material = chromeMaterial;
             } else if (name.includes('frame') || name.includes('gold') || name.includes('detail') || name.includes('brass')) {

@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Scene } from '../../components/3d/Scene';
 import { Button } from '../../components/common/Button';
 import { Calendar, ArrowRight } from 'lucide-react';
+import { useData } from '../../context/DataContext';
 
 const particles = Array.from({ length: 30 }).map((_, i) => ({
   id: i,
@@ -13,6 +14,8 @@ const particles = Array.from({ length: 30 }).map((_, i) => ({
 }));
 
 export const Hero = () => {
+  const { settings } = useData();
+  
   return (
     <section className="relative w-full h-screen overflow-hidden flex items-center">
       {/* Dynamic Background */}
@@ -54,11 +57,11 @@ export const Hero = () => {
           className="text-center lg:text-left"
         >
           <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold mb-8 leading-tight">
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold via-yellow-200 to-gold">ELITE CUTS</span>
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold via-yellow-200 to-gold uppercase">{settings.siteTitle}</span>
           </h1>
           
           <p className="text-xl md:text-2xl text-gray-400 mb-8 tracking-widest uppercase">
-            Premium Barbershop Experience
+            {settings.tagline}
           </p>
 
           <p className="text-lg text-gray-500 max-w-xl mx-auto lg:mx-0 mb-10 leading-relaxed">

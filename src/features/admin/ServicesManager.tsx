@@ -1,11 +1,21 @@
 import React, { useState } from 'react';
-import { Plus, Edit2, Trash2, Search, Scissors } from 'lucide-react';
+import { Plus, Edit2, Trash2, Search, Scissors, X } from 'lucide-react';
 import { Button } from '../../components/common/Button';
 import { useData } from '../../context/DataContext';
+import type { Service } from '../../context/DataContext';
 
 export const ServicesManager = () => {
-  const { services, addService, deleteService } = useData();
+  const { services, addService, updateService, deleteService } = useData();
   const [searchTerm, setSearchTerm] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingService, setEditingService] = useState<Service | null>(null);
+  const [formData, setFormData] = useState({
+    title: '',
+    price: '',
+    duration: '',
+    description: '',
+    features: ''
+  });
 
   const filteredServices = services.filter(service => 
     service.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -13,15 +23,45 @@ export const ServicesManager = () => {
   );
 
   const handleAddService = () => {
-    // For demo purposes, adding a new service directly
-    const newService = {
-      title: "New Premium Service",
-      price: "$60",
-      duration: "50 min",
-      description: "A newly added premium service description.",
-      features: ["Feature 1", "Feature 2"]
+    setEditingService(null);
+    setFormData({
+      title: '',
+      price: '',
+      duration: '',
+      description: '',
+      features: ''
+    });
+    setIsModalOpen(true);
+  };
+
+  const handleEditService = (service: Service) => {
+    setEditingService(service);
+    setFormData({
+      title: service.title,
+      price: service.price,
+      duration: service.duration,
+      description: service.description,
+      features: service.features.join(', ')
+    });
+    setIsModalOpen(true);
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const serviceData = {
+      title: formData.title,
+      price: formData.price,
+      duration: formData.duration,
+      description: formData.description,
+      features: formData.features.split(',').map(f => f.trim()).filter(f => f !== '')
     };
-    addService(newService);
+
+    if (editingService) {
+      updateService(editingService.id, serviceData);
+    } else {
+      addService(serviceData);
+    }
+    setIsModalOpen(false);
   };
 
   return (
@@ -99,7 +139,10 @@ export const ServicesManager = () => {
                   </td>
                   <td className="p-4 text-right">
                     <div className="flex items-center justify-end gap-2">
-                      <button className="p-2 text-gray-400 hover:text-gold hover:bg-gold/10 rounded-lg transition-colors">
+                      <button 
+                        className="p-2 text-gray-400 hover:text-gold hover:bg-gold/10 rounded-lg transition-colors"
+                        onClick={() => handleEditService(service)}
+                      >
                         <Edit2 size={18} />
                       </button>
                       <button 
@@ -122,6 +165,99 @@ export const ServicesManager = () => {
           </div>
         )}
       </div>
+
+      {/* Modal */}
+      {isModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+          <div className="bg-[#1a1a1a] border border-gold/20 rounded-xl w-full max-w-lg shadow-2xl animate-in fade-in zoom-in-95">
+            <div className="flex justify-between items-center p-6 border-b border-white/10">
+              <h2 className="text-xl font-serif text-white">
+                {editingService ? 'Edit Service' : 'Add New Service'}
+              </h2>
+              <button 
+                onClick={() => setIsModalOpen(false)}
+                className="text-gray-400 hover:text-white transition-colors"
+              >
+                <X size={24} />
+              </button>
+            </div>
+            
+            <form onSubmit={handleSubmit} className="p-6 space-y-4">
+              <div>
+                <label className="block text-sm text-gray-400 mb-1">Service Title</label>
+                <input 
+                  type="text" 
+                  required
+                  value={formData.title}
+                  onChange={(e) => setFormData({...formData, title: e.target.value})}
+                  className="w-full bg-dark border border-white/10 rounded-lg p-3 text-white focus:border-gold focus:outline-none"
+                  placeholder="e.g. Classic Haircut"
+                />
+              </div>
+              
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm text-gray-400 mb-1">Price</label>
+                  <input 
+                    type="text" 
+                    required
+                    value={formData.price}
+                    onChange={(e) => setFormData({...formData, price: e.target.value})}
+                    className="w-full bg-dark border border-white/10 rounded-lg p-3 text-white focus:border-gold focus:outline-none"
+                    placeholder="e.g. $45"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm text-gray-400 mb-1">Duration</label>
+                  <input 
+                    type="text" 
+                    required
+                    value={formData.duration}
+                    onChange={(e) => setFormData({...formData, duration: e.target.value})}
+                    className="w-full bg-dark border border-white/10 rounded-lg p-3 text-white focus:border-gold focus:outline-none"
+                    placeholder="e.g. 45 min"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm text-gray-400 mb-1">Description</label>
+                <textarea 
+                  required
+                  value={formData.description}
+                  onChange={(e) => setFormData({...formData, description: e.target.value})}
+                  className="w-full bg-dark border border-white/10 rounded-lg p-3 text-white focus:border-gold focus:outline-none h-24 resize-none"
+                  placeholder="Service description..."
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm text-gray-400 mb-1">Features (comma separated)</label>
+                <input 
+                  type="text" 
+                  value={formData.features}
+                  onChange={(e) => setFormData({...formData, features: e.target.value})}
+                  className="w-full bg-dark border border-white/10 rounded-lg p-3 text-white focus:border-gold focus:outline-none"
+                  placeholder="e.g. Hot Towel, Styling, Wash"
+                />
+              </div>
+
+              <div className="flex justify-end gap-3 pt-4">
+                <Button 
+                  variant="outline" 
+                  type="button" 
+                  onClick={() => setIsModalOpen(false)}
+                >
+                  Cancel
+                </Button>
+                <Button variant="primary" type="submit">
+                  {editingService ? 'Save Changes' : 'Create Service'}
+                </Button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -39,7 +39,7 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => (
 );
 
 function App() {
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   return (
     <DataProvider>

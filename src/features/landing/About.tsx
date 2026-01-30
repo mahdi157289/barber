@@ -2,8 +2,11 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { SectionTitle } from '../../components/common/SectionTitle';
 import { Button } from '../../components/common/Button';
+import { useData } from '../../context/DataContext';
 
 export const About = () => {
+  const { settings } = useData();
+
   return (
     <section id="about" className="py-20 relative overflow-hidden">
       {/* Background Elements */}
@@ -50,7 +53,7 @@ export const About = () => {
             
             <div className="space-y-6 text-gray-300">
               <p className="text-lg leading-relaxed">
-                Founded with a passion for the craft, Elite Cuts has been the go-to destination for men who appreciate premium grooming. Our skilled barbers combine traditional techniques with modern trends to deliver exceptional results every time.
+                Founded with a passion for the craft, {settings.siteTitle} has been the go-to destination for men who appreciate premium grooming. Our skilled barbers combine traditional techniques with modern trends to deliver exceptional results every time.
               </p>
               
               <p className="text-lg leading-relaxed">

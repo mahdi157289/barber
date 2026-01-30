@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Upload, Trash2, Eye, MoreVertical } from 'lucide-react';
 import { Button } from '../../components/common/Button';
@@ -6,15 +6,35 @@ import { useData } from '../../context/DataContext';
 
 export const GalleryManager = () => {
   const { gallery, addGalleryItem, deleteGalleryItem } = useData();
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const handleUpload = () => {
-    // For demo purposes, adding a new image directly
-    const newImage = {
-      url: "https://images.unsplash.com/photo-1593702288056-7927b442d0fa?ixlib=rb-4.0.3",
-      title: "New Upload",
-      date: new Date().toISOString().split('T')[0]
+  const handleUploadClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    if (file.size > 5 * 1024 * 1024) {
+      alert("File size exceeds 5MB limit.");
+      event.target.value = '';
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      const newImage = {
+        url: reader.result as string,
+        title: file.name.split('.')[0], // Use filename as default title
+        date: new Date().toISOString().split('T')[0]
+      };
+      addGalleryItem(newImage);
     };
-    addGalleryItem(newImage);
+    reader.readAsDataURL(file);
+    
+    // Reset input so same file can be selected again if needed
+    event.target.value = '';
   };
 
   return (
@@ -24,7 +44,14 @@ export const GalleryManager = () => {
           <h1 className="text-2xl font-serif text-white">Gallery Management</h1>
           <p className="text-gray-400 text-sm">Upload and manage your portfolio images</p>
         </div>
-        <Button variant="primary" onClick={handleUpload}>
+        <input 
+          type="file" 
+          ref={fileInputRef} 
+          className="hidden" 
+          accept="image/*" 
+          onChange={handleFileChange}
+        />
+        <Button variant="primary" onClick={handleUploadClick}>
           <Upload size={18} className="mr-2" />
           Upload Images
         </Button>
@@ -32,7 +59,7 @@ export const GalleryManager = () => {
 
       {/* Upload Area */}
       <div 
-        onClick={handleUpload}
+        onClick={handleUploadClick}
         className="bg-linear-to-br from-[#1a1a1a] to-[#0d0d0d] border-2 border-dashed border-gold/20 rounded-xl p-8 text-center hover:border-gold/50 hover:bg-gold/5 transition-all cursor-pointer group"
       >
         <div className="w-16 h-16 bg-dark rounded-full flex items-center justify-center mx-auto mb-4 border border-gold/20 group-hover:scale-110 transition-transform">
@@ -53,7 +80,7 @@ export const GalleryManager = () => {
           >
             <div className="aspect-square relative overflow-hidden">
               <img 
-                src={`${image.url}&auto=format&fit=crop&w=400&q=80`} 
+                src={image.url.startsWith('data:') ? image.url : `${image.url}&auto=format&fit=crop&w=400&q=80`} 
                 alt={image.title}
                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
               />

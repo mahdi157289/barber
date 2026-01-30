@@ -216,13 +216,13 @@ export const BookingModal = () => {
                                 ? "border-gold bg-gold text-dark"
                                 : isAvailable 
                                   ? "border-white/10 hover:border-gold/50 hover:bg-white/5 text-white"
-                                  : "border-white/5 bg-white/5 text-gray-600 cursor-not-allowed opacity-50"
+                                  : "border-red-500/20 bg-red-500/10 text-red-500/50 cursor-not-allowed"
                             )}
                           >
                             {time}
                             {!isAvailable && (
-                              <div className="absolute inset-0 flex items-center justify-center bg-dark/50 backdrop-blur-[1px]">
-                                <X size={12} className="text-red-500" />
+                              <div className="absolute inset-0 flex items-center justify-center bg-black/40 backdrop-blur-[1px]">
+                                <X size={16} className="text-red-500 font-bold" />
                               </div>
                             )}
                           </button>

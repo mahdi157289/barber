@@ -71,6 +71,16 @@ export interface Worker {
   instagram?: string;
 }
 
+export interface SiteSettings {
+  siteTitle: string;
+  tagline: string;
+  email: string;
+  phone: string;
+  address: string;
+  instagram: string;
+  facebook: string;
+}
+
 interface DataContextType {
   services: Service[];
   gallery: GalleryItem[];
@@ -95,7 +105,7 @@ interface DataContextType {
   deleteTestimonial: (id: number) => void;
 
   // Booking Actions
-  addBooking: (booking: Omit<Booking, 'id' | 'status' | 'initials' | 'color'>) => void;
+  addBooking: (booking: Omit<Booking, 'id' | 'status' | 'initials' | 'color'>) => boolean;
   updateBookingStatus: (id: number, status: Booking['status']) => void;
   toggleBlockTime: (date: string, time: string) => void;
   isTimeSlotAvailable: (date: string, time: string) => boolean;
@@ -109,6 +119,9 @@ interface DataContextType {
   addWorker: (worker: Omit<Worker, 'id'>) => void;
   updateWorker: (id: number, worker: Partial<Worker>) => void;
   deleteWorker: (id: number) => void;
+
+  // Settings Actions
+  updateSettings: (settings: Partial<SiteSettings>) => void;
 }
 
 const DataContext = createContext<DataContextType | undefined>(undefined);
@@ -167,10 +180,10 @@ const initialTestimonials: Testimonial[] = [
 ];
 
 const initialBookings: Booking[] = [
-    { id: 1, name: "John Doe", email: "john@email.com", service: "Classic Haircut", time: "Today, 2:00 PM", price: "$35", status: "Confirmed", initials: "JD", color: "bg-gold", date: new Date().toLocaleDateString('en-CA'), phone: "555-0101" },
-    { id: 2, name: "Mike Smith", email: "mike@email.com", service: "VIP Package", time: "Today, 4:30 PM", price: "$85", status: "Pending", initials: "MS", color: "bg-blue-500", date: new Date().toLocaleDateString('en-CA'), phone: "555-0102" },
-    { id: 3, name: "Robert Johnson", email: "robert@email.com", service: "Beard Grooming", time: "Tomorrow, 10:00 AM", price: "$25", status: "Confirmed", initials: "RJ", color: "bg-green-500", date: new Date(Date.now() + 86400000).toLocaleDateString('en-CA'), phone: "555-0103" },
-    { id: 4, name: "Alex Wilson", email: "alex@email.com", service: "Hair Design", time: "Tomorrow, 2:00 PM", price: "$50", status: "In Progress", initials: "AW", color: "bg-purple-500", date: new Date(Date.now() + 86400000).toLocaleDateString('en-CA'), phone: "555-0104" }
+    { id: 1, name: "John Doe", email: "john@email.com", service: "Classic Haircut", time: "2:00 PM", price: "$35", status: "Confirmed", initials: "JD", color: "bg-gold", date: new Date().toLocaleDateString('en-CA'), phone: "555-0101" },
+    { id: 2, name: "Mike Smith", email: "mike@email.com", service: "VIP Package", time: "4:30 PM", price: "$85", status: "Pending", initials: "MS", color: "bg-blue-500", date: new Date().toLocaleDateString('en-CA'), phone: "555-0102" },
+    { id: 3, name: "Robert Johnson", email: "robert@email.com", service: "Beard Grooming", time: "10:00 AM", price: "$25", status: "Confirmed", initials: "RJ", color: "bg-green-500", date: new Date(Date.now() + 86400000).toLocaleDateString('en-CA'), phone: "555-0103" },
+    { id: 4, name: "Alex Wilson", email: "alex@email.com", service: "Hair Design", time: "2:00 PM", price: "$50", status: "In Progress", initials: "AW", color: "bg-purple-500", date: new Date(Date.now() + 86400000).toLocaleDateString('en-CA'), phone: "555-0104" }
 ];
 
 const initialWorkers: Worker[] = [
@@ -178,6 +191,18 @@ const initialWorkers: Worker[] = [
   { id: 2, name: "James Miller", role: "Senior Stylist", image: "https://images.unsplash.com/photo-1595152772835-219674b2a8a6?ixlib=rb-4.0.3", bio: "Expert in beard grooming and hot towel shaves. James ensures every client leaves looking sharp.", instagram: "jamescuts" },
   { id: 3, name: "Sarah Jenkins", role: "Color Specialist", image: "https://images.unsplash.com/photo-1607990281513-2c110a25bd8c?ixlib=rb-4.0.3", bio: "Bringing creativity to every cut, Sarah is our go-to for hair coloring and designs.", instagram: "sarahstyles" }
 ];
+
+const initialSettings: SiteSettings = {
+  siteTitle: "Elite Cuts Barbershop",
+  tagline: "Premium Grooming Experience",
+  email: "info@elitecuts.com",
+  phone: "+1 (555) 123-4567",
+  address: "123 Barber Street, Luxury District, New York, NY 10001",
+  instagram: "https://instagram.com",
+  facebook: "https://facebook.com",
+  tiktok: "https://tiktok.com",
+  twitter: "https://twitter.com"
+};
 
 export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [services, setServices] = useState<Service[]>(() => {
@@ -215,6 +240,11 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     return saved ? JSON.parse(saved) : initialWorkers;
   });
 
+  const [settings, setSettings] = useState<SiteSettings>(() => {
+    const saved = localStorage.getItem('settings');
+    return saved ? JSON.parse(saved) : initialSettings;
+  });
+
   // Persistence Effects
   useEffect(() => localStorage.setItem('services', JSON.stringify(services)), [services]);
   useEffect(() => localStorage.setItem('gallery', JSON.stringify(gallery)), [gallery]);
@@ -223,6 +253,7 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   useEffect(() => localStorage.setItem('blockedTimes', JSON.stringify(blockedTimes)), [blockedTimes]);
   useEffect(() => localStorage.setItem('messages', JSON.stringify(messages)), [messages]);
   useEffect(() => localStorage.setItem('workers', JSON.stringify(workers)), [workers]);
+  useEffect(() => localStorage.setItem('settings', JSON.stringify(settings)), [settings]);
 
   // Sync with other tabs
   useEffect(() => {
@@ -230,6 +261,7 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       if (e.key === 'bookings' && e.newValue) setBookings(JSON.parse(e.newValue));
       if (e.key === 'blockedTimes' && e.newValue) setBlockedTimes(JSON.parse(e.newValue));
       if (e.key === 'workers' && e.newValue) setWorkers(JSON.parse(e.newValue));
+      if (e.key === 'settings' && e.newValue) setSettings(JSON.parse(e.newValue));
     };
     window.addEventListener('storage', handleStorageChange);
     return () => window.removeEventListener('storage', handleStorageChange);
@@ -277,6 +309,11 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   };
 
   const addBooking = (booking: Omit<Booking, 'id' | 'status' | 'initials' | 'color'>) => {
+    // Check for availability one last time before booking
+    if (!isTimeSlotAvailable(booking.date, booking.time)) {
+      return false;
+    }
+
     const initials = booking.name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2);
     const colors = ['bg-gold', 'bg-blue-500', 'bg-green-500', 'bg-purple-500', 'bg-red-500'];
     const color = colors[Math.floor(Math.random() * colors.length)];
@@ -289,6 +326,7 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       color
     };
     setBookings([newBooking, ...bookings]);
+    return true;
   };
 
   const updateBookingStatus = (id: number, status: Booking['status']) => {
@@ -341,6 +379,10 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     setWorkers(workers.filter(w => w.id !== id));
   };
 
+  const updateSettings = (updatedSettings: Partial<SiteSettings>) => {
+    setSettings({ ...settings, ...updatedSettings });
+  };
+
   return (
     <DataContext.Provider value={{
       services,
@@ -350,6 +392,7 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       blockedTimes,
       messages,
       workers,
+      settings,
       addService,
       updateService,
       deleteService,
@@ -367,7 +410,8 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       deleteMessage,
       addWorker,
       updateWorker,
-      deleteWorker
+      deleteWorker,
+      updateSettings
     }}>
       {children}
     </DataContext.Provider>

@@ -4,8 +4,14 @@ import { Menu, X, Scissors, Calendar } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import clsx from 'clsx';
 import { Button } from '../common/Button';
+import { useData } from '../../context/DataContext';
 
 export const Navbar = () => {
+  const { settings } = useData();
+  const titleParts = settings.siteTitle.split(' ');
+  const titleFirst = titleParts[0];
+  const titleRest = titleParts.slice(1).join(' ');
+
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('');
@@ -82,7 +88,7 @@ export const Navbar = () => {
                 <Scissors className="w-full h-full p-1 text-gold" />
              </div>
              <span className="font-serif font-bold text-xl tracking-wider text-white transition-all duration-500 opacity-100 w-auto">
-               ELITE <span className="text-gold">CUTS</span>
+               {titleFirst} <span className="text-gold">{titleRest}</span>
              </span>
           </Link>
 
