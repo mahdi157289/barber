@@ -1,73 +1,69 @@
-# React + TypeScript + Vite
+# Elite Cuts - Luxury Barbershop Website
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern, premium barbershop website built with the latest web technologies. This project features a luxurious design, smooth animations, and a fully integrated booking system, all supporting multiple languages (English, French, Arabic).
 
-Currently, two official plugins are available:
+## 🌟 Key Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### Core Functionality
+-   **Premium Landing Page:** captivating Hero section, detailed Services list, Style Gallery, Team showcase, Testimonials, and Contact form.
+-   **Smart Booking System:** A multi-step modal experience allowing clients to select services, dates, and times with ease.
+-   **Multi-Language Support (i18n):** Full localization for **English**, **French**, and **Arabic**, including automatic **RTL (Right-to-Left)** layout adjustments for Arabic users.
+-   **Responsive Design:** Flawless experience across all devices, from mobile phones to large desktop screens.
 
-## React Compiler
+### User Experience (UX) & Effects
+-   **Smooth Animations:** Powered by **Framer Motion**, elements glide into view, fade in gracefully, and respond to user interactions.
+-   **Interactive UI:**
+    -   **Hover Effects:** Gold accents, card scaling, and shadow depth changes on interaction.
+    -   **Scroll Spy Navigation:** The navbar automatically highlights the current section as you scroll.
+    -   **Glassmorphism:** Subtle blur effects on overlays and modals for a modern feel.
+    -   **Dynamic Time Formatting:** Booking slots adapt to 12h/24h formats based on the selected language.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## 🛠️ Tech Stack
 
-## Expanding the ESLint configuration
+This project is built using a modern, type-safe, and high-performance stack:
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### Framework & Build
+-   **[React 18](https://react.dev/):** The library for web and native user interfaces.
+-   **[Vite](https://vitejs.dev/):** Next Generation Frontend Tooling for lightning-fast development and builds.
+-   **[TypeScript](https://www.typescriptlang.org/):** For type safety and better developer experience.
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### Styling & UI
+-   **[Tailwind CSS (v4)](https://tailwindcss.com/):** A utility-first CSS framework for rapid UI development.
+-   **[Framer Motion](https://www.framer.com/motion/):** A production-ready motion library for React.
+-   **[Lucide React](https://lucide.dev/):** Beautiful & consistent icons.
+-   **[clsx](https://github.com/lukeed/clsx) & [tailwind-merge](https://github.com/dcastil/tailwind-merge):** Utilities for constructing className strings conditionally.
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+### Internationalization
+-   **[i18next](https://www.i18next.com/):** The core internationalization framework.
+-   **[react-i18next](https://react.i18next.com/):** Powerful internationalization for React.
+-   **[i18next-browser-languagedetector](https://github.com/i18next/i18next-browser-languageDetector):** Detects user language settings automatically.
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+### Routing & State
+-   **[React Router](https://reactrouter.com/):** Declarative routing for React.
+-   **React Context API:** Used for global state management (Settings, Booking Data).
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## 🚀 Getting Started
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+1.  **Clone the repository:**
+    ```bash
+    git clone https://github.com/yourusername/elite-cuts-react.git
+    ```
+2.  **Install dependencies:**
+    ```bash
+    npm install
+    ```
+3.  **Run the development server:**
+    ```bash
+    npm run dev
+    ```
+4.  **Open your browser:**
+    Navigate to `http://localhost:5173` (or the port shown in your terminal).
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## 🎨 Theme Details
+
+The design follows a "Black & Gold" luxury aesthetic:
+-   **Primary Colors:** Deep Blacks (`#0f0f0f`, `#1a1a1a`) and Metallic Gold (`#c9a227`).
+-   **Typography:** Elegant serif fonts for headings and clean sans-serif for readability.
+
+---
+*Built with precision and style.*
