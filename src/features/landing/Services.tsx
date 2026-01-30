@@ -3,8 +3,10 @@ import { motion } from 'framer-motion';
 import { SectionTitle } from '../../components/common/SectionTitle';
 import { ServiceCard } from '../../components/common/ServiceCard';
 import { useData } from '../../context/DataContext';
+import { useTranslation } from 'react-i18next';
 
 export const Services = () => {
+  const { t } = useTranslation();
   const { services } = useData();
   
   // Helper to map context service to card props (adding image if missing)
@@ -30,18 +32,18 @@ export const Services = () => {
 
       <div className="container mx-auto px-6 relative z-10">
         <SectionTitle 
-          subtitle="Our Expertise" 
-          title="Premium Services" 
+          subtitle={t('services.subtitle')}
+          title={t('services.title')}
         />
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 perspective-1000">
           {services.map((service, index) => (
             <ServiceCard 
               key={service.id}
-              title={service.title}
+              title={t(`services.items.${service.id}.title`, service.title)}
               price={service.price}
               duration={service.duration}
-              description={service.description}
+              description={t(`services.items.${service.id}.description`, service.description)}
               image={getServiceImage(service.id)}
               delay={index * 0.1}
             />

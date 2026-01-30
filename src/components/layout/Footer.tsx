@@ -1,9 +1,11 @@
 import React from 'react';
 import { Scissors, MapPin, Phone, Mail, Facebook, Instagram, Twitter, Clock } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { useData } from '../../context/DataContext';
 
 export const Footer = () => {
   const { settings } = useData();
+  const { t } = useTranslation();
   const titleParts = settings.siteTitle.split(' ');
   const titleFirst = titleParts[0];
   const titleRest = titleParts.slice(1).join(' ');
@@ -53,7 +55,7 @@ export const Footer = () => {
             <div className="w-14 h-14 bg-gold rounded-full flex items-center justify-center mb-4 text-dark">
               <MapPin size={24} />
             </div>
-            <h4 className="font-semibold text-xl text-white mb-3">Location</h4>
+            <h4 className="font-semibold text-xl text-white mb-3">{t('footer.location')}</h4>
             <p className="text-gray-400 leading-relaxed whitespace-pre-line">{settings.address}</p>
           </div>
 
@@ -62,7 +64,7 @@ export const Footer = () => {
             <div className="w-14 h-14 bg-gold rounded-full flex items-center justify-center mb-4 text-dark">
               <Phone size={24} />
             </div>
-            <h4 className="font-semibold text-xl text-white mb-3">Phone & Email</h4>
+            <h4 className="font-semibold text-xl text-white mb-3">{t('footer.phoneEmail')}</h4>
             <p className="text-gray-400 leading-relaxed">{settings.phone}</p>
             <p className="text-gray-400 leading-relaxed">{settings.email}</p>
           </div>
@@ -72,21 +74,21 @@ export const Footer = () => {
             <div className="w-14 h-14 bg-gold rounded-full flex items-center justify-center mb-4 text-dark">
               <Clock size={24} />
             </div>
-            <h4 className="font-semibold text-xl text-white mb-3">Hours</h4>
-            <p className="text-gray-400 leading-relaxed">Mon - Fri: 9AM - 8PM</p>
-            <p className="text-gray-400 leading-relaxed">Sat: 9AM - 6PM</p>
-            <p className="text-gray-400 leading-relaxed">Sun: 10AM - 4PM</p>
+            <h4 className="font-semibold text-xl text-white mb-3">{t('footer.hours')}</h4>
+            <p className="text-gray-400 leading-relaxed">{t('footer.weekdays')}</p>
+            <p className="text-gray-400 leading-relaxed">{t('footer.saturday')}</p>
+            <p className="text-gray-400 leading-relaxed">{t('footer.sunday')}</p>
           </div>
         </div>
 
         {/* Bottom Bar: Copyright and Legal Links */}
         <div className="border-t border-gold/20 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-gray-500 text-center md:text-left">&copy; {new Date().getFullYear()} {settings.siteTitle}. All rights reserved.</p>
+            <p className="text-gray-500 text-center md:text-left">&copy; {new Date().getFullYear()} {settings.siteTitle}. {t('footer.rightsReserved')}</p>
             <div className="flex gap-6">
-              <a href="#" className="text-gray-500 hover:text-gold transition-colors">Privacy Policy</a>
-              <a href="#" className="text-gray-500 hover:text-gold transition-colors">Terms of Service</a>
-              <a href="/admin" className="text-gray-500 hover:text-gold transition-colors">Admin Panel</a>
+              <a href="#" className="text-gray-500 hover:text-gold transition-colors">{t('footer.privacy')}</a>
+              <a href="#" className="text-gray-500 hover:text-gold transition-colors">{t('footer.terms')}</a>
+              <a href="/admin" className="text-gray-500 hover:text-gold transition-colors">{t('footer.admin')}</a>
             </div>
           </div>
         </div>

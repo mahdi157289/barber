@@ -3,8 +3,10 @@ import { motion } from 'framer-motion';
 import { SectionTitle } from '../../components/common/SectionTitle';
 import { Button } from '../../components/common/Button';
 import { useData } from '../../context/DataContext';
+import { useTranslation } from 'react-i18next';
 
 export const About = () => {
+  const { t } = useTranslation();
   const { settings } = useData();
 
   return (
@@ -32,7 +34,7 @@ export const About = () => {
               />
               <div className="absolute -bottom-8 -right-8 bg-gold p-8 rounded-lg shadow-xl max-w-[200px] hidden md:block">
                 <p className="text-dark text-4xl font-bold font-serif">15+</p>
-                <p className="text-dark font-semibold text-sm uppercase tracking-wider mt-1">Years Experience</p>
+                <p className="text-dark font-semibold text-sm uppercase tracking-wider mt-1">{t('about.yearsExperience')}</p>
               </div>
             </div>
           </motion.div>
@@ -46,33 +48,33 @@ export const About = () => {
             className="w-full lg:w-1/2"
           >
             <SectionTitle 
-              subtitle="About Us"
-              title="More Than Just A Barbershop"
+              subtitle={t('about.subtitle')}
+              title={t('about.title')}
               alignment="left"
             />
             
             <div className="space-y-6 text-gray-300">
               <p className="text-lg leading-relaxed">
-                Founded with a passion for the craft, {settings.siteTitle} has been the go-to destination for men who appreciate premium grooming. Our skilled barbers combine traditional techniques with modern trends to deliver exceptional results every time.
+                {t('about.description1', { siteTitle: settings.siteTitle })}
               </p>
               
               <p className="text-lg leading-relaxed">
-                We believe a great haircut is more than just a service—it's an experience. From the moment you walk in, you'll feel the difference. Premium products, a relaxing atmosphere, and attention to detail define everything we do.
+                {t('about.description2')}
               </p>
               
               <div className="grid grid-cols-2 gap-8 py-6">
                 <div className="text-center p-6 bg-[#1a1a1a] rounded-lg border border-white/5">
                   <p className="text-3xl font-bold text-gold mb-1">5000+</p>
-                  <p className="text-sm text-gray-400">Happy Clients</p>
+                  <p className="text-sm text-gray-400">{t('about.happyClients')}</p>
                 </div>
                 <div className="text-center p-6 bg-[#1a1a1a] rounded-lg border border-white/5">
                   <p className="text-3xl font-bold text-gold mb-1">4.9</p>
-                  <p className="text-sm text-gray-400">Rating ⭐</p>
+                  <p className="text-sm text-gray-400">{t('about.rating')} ⭐</p>
                 </div>
               </div>
               
               <Button variant="primary" onClick={() => (document.getElementById('booking-modal') as HTMLDialogElement)?.showModal()}>
-                Book Your Visit
+                {t('about.bookVisit')}
               </Button>
             </div>
           </motion.div>

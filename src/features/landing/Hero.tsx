@@ -4,6 +4,7 @@ import { Scene } from '../../components/3d/Scene';
 import { Button } from '../../components/common/Button';
 import { Calendar, ArrowRight } from 'lucide-react';
 import { useData } from '../../context/DataContext';
+import { useTranslation } from 'react-i18next';
 
 const particles = Array.from({ length: 30 }).map((_, i) => ({
   id: i,
@@ -14,6 +15,7 @@ const particles = Array.from({ length: 30 }).map((_, i) => ({
 }));
 
 export const Hero = () => {
+  const { t } = useTranslation();
   const { settings } = useData();
   
   return (
@@ -65,15 +67,15 @@ export const Hero = () => {
           </p>
 
           <p className="text-lg text-gray-500 max-w-xl mx-auto lg:mx-0 mb-10 leading-relaxed">
-            Where precision meets style. Experience the art of grooming with our master barbers who transform every visit into a statement.
+            {t('hero.description')}
           </p>
 
           <div className="flex flex-col sm:flex-row gap-6 justify-center lg:justify-start">
             <Button variant="primary" size="lg" onClick={() => (document.getElementById('booking-modal') as HTMLDialogElement)?.showModal()}>
-              Book Appointment
+              {t('hero.bookAppointment')}
             </Button>
             <Button variant="outline" size="lg" onClick={() => document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' })}>
-              Our Services
+              {t('hero.ourServices')}
             </Button>
           </div>
         </motion.div>
@@ -97,7 +99,7 @@ export const Hero = () => {
         transition={{ delay: 1.2 }}
         className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex flex-col items-center"
       >
-        <p className="text-sm text-gray-400 mb-2 uppercase tracking-widest text-xs">Scroll Down</p>
+        <p className="text-sm text-gray-400 mb-2 uppercase tracking-widest text-xs">{t('hero.scrollDown')}</p>
         <motion.div 
           animate={{ y: [0, 10, 0], opacity: [0.5, 1, 0.5] }}
           transition={{ repeat: Infinity, duration: 2 }}

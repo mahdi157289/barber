@@ -1,11 +1,13 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Instagram } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { SectionTitle } from '../../components/common/SectionTitle';
 import { useData } from '../../context/DataContext';
 
 export const Team = () => {
   const { workers } = useData();
+  const { t } = useTranslation();
 
   return (
     <section id="team" className="py-24 bg-dark relative overflow-hidden">
@@ -16,8 +18,8 @@ export const Team = () => {
 
       <div className="container mx-auto px-6 relative z-10">
         <SectionTitle 
-          subtitle="Our Team" 
-          title="Meet the Masters" 
+          subtitle={t('team.subtitle')} 
+          title={t('team.title')} 
         />
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
@@ -55,8 +57,8 @@ export const Team = () => {
 
               <div className="text-center">
                 <h3 className="text-xl font-bold text-white mb-1 group-hover:text-gold transition-colors">{worker.name}</h3>
-                <p className="text-gold text-sm font-medium uppercase tracking-wider mb-3">{worker.role}</p>
-                <p className="text-gray-400 text-sm leading-relaxed max-w-xs mx-auto">{worker.bio}</p>
+                <p className="text-gold text-sm font-medium uppercase tracking-wider mb-3">{t(`team.members.${worker.id}.role`, worker.role)}</p>
+                <p className="text-gray-400 text-sm leading-relaxed max-w-xs mx-auto">{t(`team.members.${worker.id}.bio`, worker.bio)}</p>
               </div>
             </motion.div>
           ))}

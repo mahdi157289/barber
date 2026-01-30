@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { X, Calendar, Clock, Scissors, User } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { Button } from './Button';
 import { useData } from '../../context/DataContext';
 import clsx from 'clsx';
@@ -8,6 +9,7 @@ import clsx from 'clsx';
 export const BookingModal = () => {
   const dialogRef = useRef<HTMLDialogElement>(null);
   const { addBooking, isTimeSlotAvailable } = useData();
+  const { t, i18n } = useTranslation();
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
     service: '',
@@ -44,15 +46,15 @@ export const BookingModal = () => {
     });
 
     console.log('Booking submitted:', formData);
-    alert('Booking request sent! We will confirm shortly.');
+    alert(t('booking.success'));
     close();
   };
 
   const services = [
-    "Classic Haircut - $30",
-    "Beard Trim - $20",
-    "Full Service (Cut & Shave) - $50",
-    "Kids Cut - $25"
+    { id: 'classic', price: 30 },
+    { id: 'beard', price: 20 },
+    { id: 'full', price: 50 },
+    { id: 'kids', price: 25 }
   ];
 
   const timeSlots = [
@@ -89,28 +91,28 @@ export const BookingModal = () => {
           {/* Sidebar */}
           <div className="w-full md:w-1/3 bg-darker p-8 border-b md:border-b-0 md:border-r border-gold/10 flex flex-col justify-between">
             <div>
-              <h2 className="text-2xl font-serif text-gold mb-2">Book Appointment</h2>
-              <p className="text-gray-400 text-sm">Step {step} of 3</p>
+              <h2 className="text-2xl font-serif text-gold mb-2">{t('booking.title')}</h2>
+              <p className="text-gray-400 text-sm">{t('booking.step', { step })}</p>
               
               <div className="mt-8 space-y-4">
                 <div className={`flex items-center gap-3 ${step >= 1 ? 'text-white' : 'text-gray-600'}`}>
                   <div className={`w-8 h-8 rounded-full flex items-center justify-center border ${step >= 1 ? 'border-gold bg-gold/10 text-gold' : 'border-gray-700 bg-transparent'}`}>1</div>
-                  <span className="text-sm font-medium">Service & Date</span>
+                  <span className="text-sm font-medium">{t('booking.steps.serviceDate')}</span>
                 </div>
                 <div className={`flex items-center gap-3 ${step >= 2 ? 'text-white' : 'text-gray-600'}`}>
                   <div className={`w-8 h-8 rounded-full flex items-center justify-center border ${step >= 2 ? 'border-gold bg-gold/10 text-gold' : 'border-gray-700 bg-transparent'}`}>2</div>
-                  <span className="text-sm font-medium">Select Time</span>
+                  <span className="text-sm font-medium">{t('booking.steps.time')}</span>
                 </div>
                 <div className={`flex items-center gap-3 ${step >= 3 ? 'text-white' : 'text-gray-600'}`}>
                   <div className={`w-8 h-8 rounded-full flex items-center justify-center border ${step >= 3 ? 'border-gold bg-gold/10 text-gold' : 'border-gray-700 bg-transparent'}`}>3</div>
-                  <span className="text-sm font-medium">Your Details</span>
+                  <span className="text-sm font-medium">{t('booking.steps.details')}</span>
                 </div>
               </div>
             </div>
             
             <div className="mt-8 pt-8 border-t border-gold/10">
               <p className="text-xs text-gray-500">
-                Need help? Call us at<br />
+                {t('booking.help')}<br />
                 <span className="text-gold font-medium text-sm">+1 (555) 123-4567</span>
               </p>
             </div>
@@ -129,36 +131,40 @@ export const BookingModal = () => {
                   >
                     <h3 className="text-xl font-medium mb-6 flex items-center gap-2">
                       <Scissors className="text-gold" size={20} />
-                      Select Service
+                      {t('booking.selectService')}
                     </h3>
                     
                     <div className="space-y-3">
-                      {services.map((service) => (
-                        <label 
-                          key={service}
-                          className={`block p-4 rounded-lg border cursor-pointer transition-all ${
-                            formData.service === service 
-                              ? 'border-gold bg-gold/10' 
-                              : 'border-white/10 hover:border-gold/50 hover:bg-white/5'
-                          }`}
-                        >
-                          <input 
-                            type="radio" 
-                            name="service" 
-                            value={service}
-                            checked={formData.service === service}
-                            onChange={(e) => setFormData({...formData, service: e.target.value})}
-                            className="hidden"
-                          />
-                          <span className="text-sm font-medium">{service}</span>
-                        </label>
-                      ))}
+                      {services.map((service) => {
+                        // @ts-ignore
+                        const serviceLabel = `${t(`booking.servicesList.${service.id}`)} - $${service.price}`;
+                        return (
+                          <label 
+                            key={service.id}
+                            className={`block p-4 rounded-lg border cursor-pointer transition-all ${
+                              formData.service === serviceLabel 
+                                ? 'border-gold bg-gold/10' 
+                                : 'border-white/10 hover:border-gold/50 hover:bg-white/5'
+                            }`}
+                          >
+                            <input 
+                              type="radio" 
+                              name="service" 
+                              value={serviceLabel}
+                              checked={formData.service === serviceLabel}
+                              onChange={(e) => setFormData({...formData, service: e.target.value})}
+                              className="hidden"
+                            />
+                            <span className="text-sm font-medium">{serviceLabel}</span>
+                          </label>
+                        );
+                      })}
                     </div>
 
                     <div className="mt-6">
                       <h3 className="text-xl font-medium mb-4 flex items-center gap-2">
                         <Calendar className="text-gold" size={20} />
-                        Select Date
+                        {t('booking.selectDate')}
                       </h3>
                       
                       <div className="flex gap-3 overflow-x-auto pb-4 scrollbar-thin scrollbar-thumb-gold/20 scrollbar-track-white/5">
@@ -178,7 +184,7 @@ export const BookingModal = () => {
                                   : "bg-white/5 border-white/10 text-gray-400 hover:bg-white/10 hover:border-gold/30"
                               )}
                             >
-                              <span className="text-xs uppercase font-medium">{date.toLocaleDateString('en-US', { weekday: 'short' })}</span>
+                              <span className="text-xs uppercase font-medium">{date.toLocaleDateString(i18n.language, { weekday: 'short' })}</span>
                               <span className="text-xl font-bold">{date.getDate()}</span>
                             </button>
                           );
@@ -196,7 +202,7 @@ export const BookingModal = () => {
                   >
                     <h3 className="text-xl font-medium mb-6 flex items-center gap-2">
                       <Clock className="text-gold" size={20} />
-                      Select Time
+                      {t('booking.selectTime')}
                     </h3>
                     
                     <div className="grid grid-cols-3 gap-3">
@@ -241,41 +247,41 @@ export const BookingModal = () => {
                   >
                     <h3 className="text-xl font-medium mb-6 flex items-center gap-2">
                       <User className="text-gold" size={20} />
-                      Your Details
+                      {t('booking.steps.details')}
                     </h3>
                     
                     <div className="space-y-4">
                       <div>
-                        <label className="block text-sm text-gray-400 mb-1">Full Name</label>
+                        <label className="block text-sm text-gray-400 mb-1">{t('booking.form.name')}</label>
                         <input 
                           type="text" 
                           required
                           value={formData.name}
                           onChange={(e) => setFormData({...formData, name: e.target.value})}
                           className="w-full bg-dark border border-white/10 rounded-lg p-3 text-white focus:border-gold focus:outline-none"
-                          placeholder="John Doe"
+                          placeholder={t('contact.form.placeholders.name')}
                         />
                       </div>
                       <div>
-                        <label className="block text-sm text-gray-400 mb-1">Phone Number</label>
+                        <label className="block text-sm text-gray-400 mb-1">{t('booking.form.phone')}</label>
                         <input 
                           type="tel" 
                           required
                           value={formData.phone}
                           onChange={(e) => setFormData({...formData, phone: e.target.value})}
                           className="w-full bg-dark border border-white/10 rounded-lg p-3 text-white focus:border-gold focus:outline-none"
-                          placeholder="(555) 123-4567"
+                          placeholder={t('contact.form.placeholders.phone')}
                         />
                       </div>
                       <div>
-                        <label className="block text-sm text-gray-400 mb-1">Email Address</label>
+                        <label className="block text-sm text-gray-400 mb-1">{t('booking.form.email')}</label>
                         <input 
                           type="email" 
                           required
                           value={formData.email}
                           onChange={(e) => setFormData({...formData, email: e.target.value})}
                           className="w-full bg-dark border border-white/10 rounded-lg p-3 text-white focus:border-gold focus:outline-none"
-                          placeholder="john@example.com"
+                          placeholder={t('contact.form.placeholders.email')}
                         />
                       </div>
                     </div>
@@ -286,7 +292,7 @@ export const BookingModal = () => {
               <div className="flex justify-between mt-8 pt-6 border-t border-white/5">
                 {step > 1 ? (
                   <Button variant="outline" onClick={() => setStep(step - 1)} type="button">
-                    Back
+                    {t('booking.back')}
                   </Button>
                 ) : (
                   <div></div>
@@ -302,11 +308,11 @@ export const BookingModal = () => {
                       (step === 2 && !formData.time)
                     }
                   >
-                    Next Step
+                    {t('booking.next')}
                   </Button>
                 ) : (
                   <Button variant="primary" type="submit">
-                    Confirm Booking
+                    {t('booking.confirm')}
                   </Button>
                 )}
               </div>

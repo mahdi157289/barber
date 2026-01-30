@@ -1,19 +1,21 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 import { SectionTitle } from '../../components/common/SectionTitle';
 import { useData } from '../../context/DataContext';
 
 export const Gallery = () => {
   const { gallery } = useData();
+  const { t } = useTranslation();
 
   return (
     <section id="gallery" className="py-24 bg-dark relative">
       <div className="container mx-auto px-6">
         <SectionTitle 
-          subtitle="Our Work" 
-          title="Style Gallery" 
+          subtitle={t('gallery.subtitle')} 
+          title={t('gallery.title')} 
         />
-        <p className="text-gray-500 max-w-2xl mx-auto text-center -mt-8 mb-16">Browse our collection of signature cuts and transformations.</p>
+        <p className="text-gray-500 max-w-2xl mx-auto text-center -mt-8 mb-16">{t('gallery.description')}</p>
 
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {gallery.map((img, index) => (

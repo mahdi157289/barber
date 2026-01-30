@@ -5,8 +5,10 @@ import { motion, AnimatePresence } from 'framer-motion';
 import clsx from 'clsx';
 import { Button } from '../common/Button';
 import { useData } from '../../context/DataContext';
+import { useTranslation } from 'react-i18next';
 
 export const Navbar = () => {
+  const { t } = useTranslation();
   const { settings } = useData();
   const titleParts = settings.siteTitle.split(' ');
   const titleFirst = titleParts[0];
@@ -40,10 +42,10 @@ export const Navbar = () => {
   }, []);
 
   const navLinks = [
-    { name: 'Services', path: '#services' },
-    { name: 'Gallery', path: '#gallery' },
-    { name: 'About', path: '#about' },
-    { name: 'Contact', path: '#contact' },
+    { name: t('nav.services'), path: '#services' },
+    { name: t('nav.gallery'), path: '#gallery' },
+    { name: t('nav.about'), path: '#about' },
+    { name: t('nav.contact'), path: '#contact' },
   ];
 
   const leftLinks = navLinks.slice(0, 2);
@@ -59,9 +61,9 @@ export const Navbar = () => {
           isScrolled ? "translate-x-0 opacity-100" : "translate-x-full opacity-0 pointer-events-none"
         )}
       >
-        <div className="bg-gold text-dark font-bold text-xs py-6 px-2 rounded-l-lg shadow-[0_0_20px_rgba(201,162,39,0.3)] hover:shadow-[0_0_30px_rgba(201,162,39,0.5)] hover:bg-white transition-all flex flex-col items-center gap-3 border-l border-t border-b border-white/20 backdrop-blur-sm">
+        <div className="bg-gold text-dark font-bold text-xs py-6 px-4 rounded-l-lg shadow-[0_0_20px_rgba(201,162,39,0.3)] hover:shadow-[0_0_30px_rgba(201,162,39,0.5)] hover:bg-white transition-all flex flex-col items-center gap-3 border-l border-t border-b border-white/20 backdrop-blur-sm">
           <Calendar size={18} className="text-dark" />
-          <span className="[writing-mode:vertical-rl] rotate-180 uppercase tracking-widest whitespace-nowrap">Book Now</span>
+          <span className="[writing-mode:vertical-rl] rotate-180 uppercase tracking-widest whitespace-nowrap">{t('common.bookNow')}</span>
         </div>
       </button>
 
@@ -117,7 +119,7 @@ export const Navbar = () => {
                   onClick={() => (document.getElementById('booking-modal') as HTMLDialogElement)?.showModal()}
                   className="px-5 py-2 text-xs font-bold text-dark bg-gold rounded hover:bg-white transition-colors uppercase tracking-widest"
                 >
-                  Book Now
+                  {t('nav.bookNow')}
                 </button>
               </>
             ) : (

@@ -1,11 +1,13 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 import { SectionTitle } from '../../components/common/SectionTitle';
 import { Star, Quote } from 'lucide-react';
 import { useData } from '../../context/DataContext';
 
 export const Testimonials = () => {
   const { testimonials } = useData();
+  const { t } = useTranslation();
   
   // Only show approved testimonials
   const approvedTestimonials = testimonials.filter(t => t.status === 'Approved');
@@ -19,8 +21,8 @@ export const Testimonials = () => {
     <section id="testimonials" className="py-24 bg-darker relative">
       <div className="container mx-auto px-6">
         <SectionTitle 
-          subtitle="Testimonials"
-          title="What Our Clients Say"
+          subtitle={t('testimonials.subtitle')}
+          title={t('testimonials.title')}
         />
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-16">
@@ -43,7 +45,7 @@ export const Testimonials = () => {
                 ))}
               </div>
               
-              <p className="text-gray-300 mb-8 leading-relaxed italic">"{item.content}"</p>
+              <p className="text-gray-300 mb-8 leading-relaxed italic">"{t(`testimonials.items.${item.id}.content`, item.content)}"</p>
               
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 rounded-full bg-gold flex items-center justify-center text-dark font-bold text-lg">
@@ -51,7 +53,7 @@ export const Testimonials = () => {
                 </div>
                 <div>
                   <h4 className="text-white font-medium">{item.name}</h4>
-                  <p className="text-gold/60 text-sm">{item.role}</p>
+                  <p className="text-gold/60 text-sm">{t(`testimonials.items.${item.id}.role`, item.role)}</p>
                 </div>
               </div>
             </motion.div>

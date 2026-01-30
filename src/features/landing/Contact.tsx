@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 import { SectionTitle } from '../../components/common/SectionTitle';
 import { Button } from '../../components/common/Button';
 import { Mail, User, Phone, MessageSquare, Clock, Shield, CheckCircle, Star } from 'lucide-react';
@@ -7,6 +8,7 @@ import { useData } from '../../context/DataContext';
 
 export const Contact = () => {
   const { addMessage } = useData();
+  const { t } = useTranslation();
   const [formState, setFormState] = useState({
     name: '',
     email: '',
@@ -28,7 +30,7 @@ export const Contact = () => {
     });
 
     console.log('Form submitted:', formState);
-    alert('Message sent successfully! We will get back to you shortly.');
+    alert(t('contact.success'));
     setFormState({ name: '', email: '', phone: '', subject: '', message: '' });
   };
 
@@ -59,13 +61,13 @@ export const Contact = () => {
           </motion.div>
           
           <SectionTitle 
-            subtitle="Get In Touch"
-            title="Send Us a Message"
+            subtitle={t('contact.subtitle')}
+            title={t('contact.title')}
             alignment="center"
           />
           
           <p className="text-gray-400 max-w-2xl mx-auto leading-relaxed mt-4">
-            Have questions or want to book an appointment? We'd love to hear from you. Fill out the form below and we'll get back to you within 24 hours.
+            {t('contact.description')}
           </p>
         </div>
 
@@ -86,7 +88,7 @@ export const Contact = () => {
               <div className="group/input">
                 <label className="flex items-center gap-2 text-sm text-gray-300 mb-3 font-medium">
                   <User className="w-4 h-4 text-gold" />
-                  Your Name <span className="text-gold">*</span>
+                  {t('contact.form.name')} <span className="text-gold">*</span>
                 </label>
                 <div className="relative">
                   <input 
@@ -94,7 +96,7 @@ export const Contact = () => {
                     name="name"
                     value={formState.name}
                     onChange={handleChange}
-                    placeholder="John Doe" 
+                    placeholder={t('contact.form.placeholders.name')} 
                     className="w-full bg-white/5 border border-gold/20 rounded-xl pl-5 pr-12 py-4 text-white focus:border-gold focus:outline-none focus:ring-1 focus:ring-gold transition-all duration-300 placeholder:text-gray-600" 
                     required 
                   />
@@ -104,7 +106,7 @@ export const Contact = () => {
               <div className="group/input">
                 <label className="flex items-center gap-2 text-sm text-gray-300 mb-3 font-medium">
                   <Mail className="w-4 h-4 text-gold" />
-                  Your Email <span className="text-gold">*</span>
+                  {t('contact.form.email')} <span className="text-gold">*</span>
                 </label>
                 <div className="relative">
                   <input 
@@ -112,7 +114,7 @@ export const Contact = () => {
                     name="email"
                     value={formState.email}
                     onChange={handleChange}
-                    placeholder="john@example.com" 
+                    placeholder={t('contact.form.placeholders.email')} 
                     className="w-full bg-white/5 border border-gold/20 rounded-xl pl-5 pr-12 py-4 text-white focus:border-gold focus:outline-none focus:ring-1 focus:ring-gold transition-all duration-300 placeholder:text-gray-600" 
                     required 
                   />
@@ -125,7 +127,7 @@ export const Contact = () => {
               <div className="group/input">
                 <label className="flex items-center gap-2 text-sm text-gray-300 mb-3 font-medium">
                   <Phone className="w-4 h-4 text-gold" />
-                  Phone Number
+                  {t('contact.form.phone')}
                 </label>
                 <div className="relative">
                   <input 
@@ -133,7 +135,7 @@ export const Contact = () => {
                     name="phone"
                     value={formState.phone}
                     onChange={handleChange}
-                    placeholder="(555) 123-4567" 
+                    placeholder={t('contact.form.placeholders.phone')} 
                     className="w-full bg-white/5 border border-gold/20 rounded-xl pl-5 pr-12 py-4 text-white focus:border-gold focus:outline-none focus:ring-1 focus:ring-gold transition-all duration-300 placeholder:text-gray-600" 
                   />
                 </div>
@@ -142,7 +144,7 @@ export const Contact = () => {
               <div className="group/input">
                 <label className="flex items-center gap-2 text-sm text-gray-300 mb-3 font-medium">
                   <MessageSquare className="w-4 h-4 text-gold" />
-                  Subject
+                  {t('contact.form.subject')}
                 </label>
                 <div className="relative">
                   <input 
@@ -150,7 +152,7 @@ export const Contact = () => {
                     name="subject"
                     value={formState.subject}
                     onChange={handleChange}
-                    placeholder="How can we help you?" 
+                    placeholder={t('contact.form.placeholders.subject')} 
                     className="w-full bg-white/5 border border-gold/20 rounded-xl pl-5 pr-12 py-4 text-white focus:border-gold focus:outline-none focus:ring-1 focus:ring-gold transition-all duration-300 placeholder:text-gray-600" 
                   />
                 </div>
@@ -161,27 +163,27 @@ export const Contact = () => {
             <div className="group/input">
               <label className="flex items-center gap-2 text-sm text-gray-300 mb-3 font-medium">
                 <MessageSquare className="w-4 h-4 text-gold" />
-                Your Message <span className="text-gold">*</span>
+                {t('contact.form.message')} <span className="text-gold">*</span>
               </label>
               <textarea 
                 name="message"
                 value={formState.message}
                 onChange={handleChange}
-                placeholder="Tell us about your inquiry, preferred appointment times, or any questions you have..." 
+                placeholder={t('contact.form.placeholders.message')} 
                 rows={6} 
                 className="w-full bg-white/5 border border-gold/20 rounded-xl pl-5 pr-5 py-4 text-white focus:border-gold focus:outline-none focus:ring-1 focus:ring-gold transition-all duration-300 placeholder:text-gray-600 resize-none" 
                 required
               ></textarea>
               <p className="text-gray-600 text-xs mt-2 flex items-center gap-1">
                 <Clock className="w-3 h-3" />
-                We typically respond within 24 hours
+                {t('contact.form.responseTime')}
               </p>
             </div>
 
             {/* Submit Button */}
             <div className="pt-4">
               <button type="submit" className="w-full bg-gold hover:bg-[#a88620] text-dark font-bold py-5 rounded-xl flex items-center justify-center gap-3 transition-all duration-300 transform hover:scale-[1.02] shadow-lg hover:shadow-gold/20">
-                <span>Send Message</span>
+                <span>{t('contact.form.send')}</span>
                 <MessageSquare className="w-5 h-5" />
               </button>
             </div>
@@ -190,15 +192,15 @@ export const Contact = () => {
             <div className="flex flex-wrap items-center justify-center gap-6 pt-6 border-t border-gold/10">
               <div className="flex items-center gap-2 text-gray-500 text-sm">
                 <Shield className="w-5 h-5 text-gold" />
-                <span>Secure & Private</span>
+                <span>{t('contact.trust.secure')}</span>
               </div>
               <div className="flex items-center gap-2 text-gray-500 text-sm">
                 <CheckCircle className="w-5 h-5 text-gold" />
-                <span>Quick Response</span>
+                <span>{t('contact.trust.quick')}</span>
               </div>
               <div className="flex items-center gap-2 text-gray-500 text-sm">
                 <Star className="w-5 h-5 text-gold" />
-                <span>5-Star Service</span>
+                <span>{t('contact.trust.rating')}</span>
               </div>
             </div>
           </form>

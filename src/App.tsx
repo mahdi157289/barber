@@ -14,6 +14,7 @@ import { BookingModal } from './components/common/BookingModal';
 import { Preloader } from './components/common/Preloader';
 import { Footer } from './components/layout/Footer';
 import { ScrollToTop } from './components/common/ScrollToTop';
+import { LanguageSwitcher } from './components/common/LanguageSwitcher';
 import AdminToggle from './components/layout/AdminToggle';
 import { AdminLayout } from './features/admin/AdminLayout';
 import { Dashboard } from './features/admin/Dashboard';
@@ -34,6 +35,7 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => (
     <BookingModal />
     <ScrollToTop />
     <AdminToggle />
+    <LanguageSwitcher />
     <Footer />
   </>
 );
