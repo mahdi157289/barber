@@ -143,8 +143,14 @@ export const Navbar = () => {
                   </a>
                 ))}
 
-                <Link to="/" className="font-serif font-bold text-xl tracking-wider text-white px-4 hover:scale-105 transition-transform">
-                  ELITE <span className="text-gold">CUTS</span>
+                <Link to="/" className="flex items-center gap-3 px-6 group transition-transform hover:scale-105 shrink-0">
+                  <div className="relative w-10 h-10 overflow-hidden rounded bg-gold/10 border border-gold/50 group-hover:border-gold transition-colors">
+                    <div className="absolute inset-0 bg-[linear-gradient(45deg,transparent_25%,rgba(201,162,39,0.5)_50%,transparent_75%)] bg-[length:200%_200%] animate-[shimmer_2s_infinite]" />
+                    <img src={logo} alt="Logo" className="w-full h-full object-cover" />
+                  </div>
+                  <span className="font-serif font-bold text-lg tracking-widest text-white uppercase">
+                    {titleFirst} <span className="text-gold">{titleRest}</span>
+                  </span>
                 </Link>
 
                 {rightLinks.map((link) => (
