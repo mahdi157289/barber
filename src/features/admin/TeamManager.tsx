@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Plus, Edit2, Trash2, Search, User, X, Instagram } from 'lucide-react';
 import { Button } from '../../components/common/Button';
+import { ImageDropZone } from '../../components/common/ImageDropZone';
 import { useData, type Worker } from '../../context/DataContext';
 
 export const TeamManager = () => {
@@ -17,7 +18,7 @@ export const TeamManager = () => {
     instagram: ''
   });
 
-  const filteredWorkers = workers.filter(worker => 
+  const filteredWorkers = workers.filter(worker =>
     worker.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     worker.role.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -37,7 +38,7 @@ export const TeamManager = () => {
       setFormData({
         name: '',
         role: '',
-        image: 'https://images.unsplash.com/photo-1583900985315-953be81153bc?ixlib=rb-4.0.3', // Default placeholder
+        image: '',
         bio: '',
         instagram: ''
       });
@@ -72,9 +73,9 @@ export const TeamManager = () => {
       <div className="bg-linear-to-br from-[#1a1a1a] to-[#0d0d0d] p-4 rounded-xl border border-gold/10 flex flex-col md:flex-row gap-4">
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" size={18} />
-          <input 
-            type="text" 
-            placeholder="Search team members..." 
+          <input
+            type="text"
+            placeholder="Search team members..."
             className="w-full bg-dark/50 border border-white/10 rounded-lg pl-10 pr-4 py-2 text-white focus:border-gold focus:outline-none"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
@@ -87,19 +88,19 @@ export const TeamManager = () => {
         {filteredWorkers.map((worker) => (
           <div key={worker.id} className="bg-linear-to-br from-[#1a1a1a] to-[#0d0d0d] border border-gold/10 rounded-xl overflow-hidden group">
             <div className="aspect-[4/3] relative overflow-hidden">
-              <img 
-                src={worker.image} 
-                alt={worker.name} 
+              <img
+                src={worker.image}
+                alt={worker.name}
                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
               />
               <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3">
-                <button 
+                <button
                   onClick={() => handleOpenModal(worker)}
                   className="p-2 bg-gold text-dark rounded-full hover:bg-white transition-colors"
                 >
                   <Edit2 size={18} />
                 </button>
-                <button 
+                <button
                   onClick={() => deleteWorker(worker.id)}
                   className="p-2 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors"
                 >
@@ -107,7 +108,7 @@ export const TeamManager = () => {
                 </button>
               </div>
             </div>
-            
+
             <div className="p-5">
               <div className="flex justify-between items-start mb-2">
                 <div>
@@ -134,22 +135,22 @@ export const TeamManager = () => {
               <h2 className="text-xl font-bold text-white">
                 {editingWorker ? 'Edit Team Member' : 'Add New Member'}
               </h2>
-              <button 
+              <button
                 onClick={() => setIsModalOpen(false)}
                 className="text-gray-400 hover:text-white transition-colors"
               >
                 <X size={24} />
               </button>
             </div>
-            
+
             <form onSubmit={handleSubmit} className="p-6 space-y-4">
               <div>
                 <label className="block text-sm text-gray-400 mb-1">Full Name</label>
-                <input 
-                  type="text" 
+                <input
+                  type="text"
                   required
                   value={formData.name}
-                  onChange={(e) => setFormData({...formData, name: e.target.value})}
+                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   className="w-full bg-dark border border-white/10 rounded-lg p-3 text-white focus:border-gold focus:outline-none"
                   placeholder="e.g. John Doe"
                 />
@@ -157,36 +158,31 @@ export const TeamManager = () => {
 
               <div>
                 <label className="block text-sm text-gray-400 mb-1">Role / Position</label>
-                <input 
-                  type="text" 
+                <input
+                  type="text"
                   required
                   value={formData.role}
-                  onChange={(e) => setFormData({...formData, role: e.target.value})}
+                  onChange={(e) => setFormData({ ...formData, role: e.target.value })}
                   className="w-full bg-dark border border-white/10 rounded-lg p-3 text-white focus:border-gold focus:outline-none"
                   placeholder="e.g. Master Barber"
                 />
               </div>
 
-              <div>
-                <label className="block text-sm text-gray-400 mb-1">Photo URL</label>
-                <input 
-                  type="url" 
-                  required
-                  value={formData.image}
-                  onChange={(e) => setFormData({...formData, image: e.target.value})}
-                  className="w-full bg-dark border border-white/10 rounded-lg p-3 text-white focus:border-gold focus:outline-none"
-                  placeholder="https://..."
-                />
-              </div>
+              <ImageDropZone
+                label="Photo"
+                value={formData.image}
+                onChange={(dataUrl) => setFormData({ ...formData, image: dataUrl })}
+                maxSizeMB={5}
+              />
 
               <div>
                 <label className="block text-sm text-gray-400 mb-1">Instagram Username (Optional)</label>
                 <div className="relative">
                   <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">@</span>
-                  <input 
-                    type="text" 
+                  <input
+                    type="text"
                     value={formData.instagram}
-                    onChange={(e) => setFormData({...formData, instagram: e.target.value})}
+                    onChange={(e) => setFormData({ ...formData, instagram: e.target.value })}
                     className="w-full bg-dark border border-white/10 rounded-lg pl-8 p-3 text-white focus:border-gold focus:outline-none"
                     placeholder="username"
                   />
@@ -195,10 +191,10 @@ export const TeamManager = () => {
 
               <div>
                 <label className="block text-sm text-gray-400 mb-1">Bio</label>
-                <textarea 
+                <textarea
                   required
                   value={formData.bio}
-                  onChange={(e) => setFormData({...formData, bio: e.target.value})}
+                  onChange={(e) => setFormData({ ...formData, bio: e.target.value })}
                   className="w-full bg-dark border border-white/10 rounded-lg p-3 text-white focus:border-gold focus:outline-none min-h-[100px]"
                   placeholder="Brief description about the team member..."
                 />

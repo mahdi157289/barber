@@ -17,7 +17,7 @@ export const ServicesManager = () => {
     features: ''
   });
 
-  const filteredServices = services.filter(service => 
+  const filteredServices = services.filter(service =>
     service.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
     service.description.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -81,9 +81,9 @@ export const ServicesManager = () => {
       <div className="bg-linear-to-br from-[#1a1a1a] to-[#0d0d0d] p-4 rounded-xl border border-gold/10 flex flex-col md:flex-row gap-4">
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" size={18} />
-          <input 
-            type="text" 
-            placeholder="Search services..." 
+          <input
+            type="text"
+            placeholder="Search services..."
             className="w-full bg-dark/50 border border-white/10 rounded-lg pl-10 pr-4 py-2 text-white focus:border-gold focus:outline-none"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
@@ -139,13 +139,13 @@ export const ServicesManager = () => {
                   </td>
                   <td className="p-4 text-right">
                     <div className="flex items-center justify-end gap-2">
-                      <button 
+                      <button
                         className="p-2 text-gray-400 hover:text-gold hover:bg-gold/10 rounded-lg transition-colors"
                         onClick={() => handleEditService(service)}
                       >
                         <Edit2 size={18} />
                       </button>
-                      <button 
+                      <button
                         className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-500/10 rounded-lg transition-colors"
                         onClick={() => deleteService(service.id)}
                       >
@@ -158,7 +158,7 @@ export const ServicesManager = () => {
             </tbody>
           </table>
         </div>
-        
+
         {filteredServices.length === 0 && (
           <div className="p-8 text-center text-gray-500">
             No services found matching your search.
@@ -174,46 +174,46 @@ export const ServicesManager = () => {
               <h2 className="text-xl font-serif text-white">
                 {editingService ? 'Edit Service' : 'Add New Service'}
               </h2>
-              <button 
+              <button
                 onClick={() => setIsModalOpen(false)}
                 className="text-gray-400 hover:text-white transition-colors"
               >
                 <X size={24} />
               </button>
             </div>
-            
+
             <form onSubmit={handleSubmit} className="p-6 space-y-4">
               <div>
                 <label className="block text-sm text-gray-400 mb-1">Service Title</label>
-                <input 
-                  type="text" 
+                <input
+                  type="text"
                   required
                   value={formData.title}
-                  onChange={(e) => setFormData({...formData, title: e.target.value})}
+                  onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                   className="w-full bg-dark border border-white/10 rounded-lg p-3 text-white focus:border-gold focus:outline-none"
                   placeholder="e.g. Classic Haircut"
                 />
               </div>
-              
+
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm text-gray-400 mb-1">Price</label>
-                  <input 
-                    type="text" 
+                  <input
+                    type="text"
                     required
                     value={formData.price}
-                    onChange={(e) => setFormData({...formData, price: e.target.value})}
+                    onChange={(e) => setFormData({ ...formData, price: e.target.value })}
                     className="w-full bg-dark border border-white/10 rounded-lg p-3 text-white focus:border-gold focus:outline-none"
-                    placeholder="e.g. $45"
+                    placeholder="e.g. 45 TND"
                   />
                 </div>
                 <div>
                   <label className="block text-sm text-gray-400 mb-1">Duration</label>
-                  <input 
-                    type="text" 
+                  <input
+                    type="text"
                     required
                     value={formData.duration}
-                    onChange={(e) => setFormData({...formData, duration: e.target.value})}
+                    onChange={(e) => setFormData({ ...formData, duration: e.target.value })}
                     className="w-full bg-dark border border-white/10 rounded-lg p-3 text-white focus:border-gold focus:outline-none"
                     placeholder="e.g. 45 min"
                   />
@@ -222,10 +222,10 @@ export const ServicesManager = () => {
 
               <div>
                 <label className="block text-sm text-gray-400 mb-1">Description</label>
-                <textarea 
+                <textarea
                   required
                   value={formData.description}
-                  onChange={(e) => setFormData({...formData, description: e.target.value})}
+                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                   className="w-full bg-dark border border-white/10 rounded-lg p-3 text-white focus:border-gold focus:outline-none h-24 resize-none"
                   placeholder="Service description..."
                 />
@@ -233,19 +233,19 @@ export const ServicesManager = () => {
 
               <div>
                 <label className="block text-sm text-gray-400 mb-1">Features (comma separated)</label>
-                <input 
-                  type="text" 
+                <input
+                  type="text"
                   value={formData.features}
-                  onChange={(e) => setFormData({...formData, features: e.target.value})}
+                  onChange={(e) => setFormData({ ...formData, features: e.target.value })}
                   className="w-full bg-dark border border-white/10 rounded-lg p-3 text-white focus:border-gold focus:outline-none"
                   placeholder="e.g. Hot Towel, Styling, Wash"
                 />
               </div>
 
               <div className="flex justify-end gap-3 pt-4">
-                <Button 
-                  variant="outline" 
-                  type="button" 
+                <Button
+                  variant="outline"
+                  type="button"
                   onClick={() => setIsModalOpen(false)}
                 >
                   Cancel

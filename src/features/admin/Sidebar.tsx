@@ -1,18 +1,20 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { 
-  LayoutDashboard, 
-  Scissors, 
-  Image, 
-  Users, 
-  Calendar, 
-  MessageSquare, 
-  Settings, 
-  ChevronLeft, 
+import {
+  LayoutDashboard,
+  Scissors,
+  Image,
+  Users,
+  Calendar,
+  MessageSquare,
+  Settings,
+  ChevronLeft,
   ChevronRight,
   LogOut,
   FileText,
-  Star
+  Star,
+  Package,
+  Film
 } from 'lucide-react';
 import clsx from 'clsx';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -27,6 +29,8 @@ export const Sidebar = ({ isCollapsed, toggleSidebar }: SidebarProps) => {
     { name: 'Dashboard', path: '/admin', icon: LayoutDashboard },
     { name: 'Bookings', path: '/admin/bookings', icon: Calendar, badge: 5 },
     { name: 'Services', path: '/admin/services', icon: Scissors },
+    { name: 'Products', path: '/admin/products', icon: Package },
+    { name: 'Media', path: '/admin/media', icon: Film },
     { name: 'Team', path: '/admin/team', icon: Users },
     { name: 'Gallery', path: '/admin/gallery', icon: Image },
     { name: 'Testimonials', path: '/admin/testimonials', icon: Star },
@@ -36,13 +40,13 @@ export const Sidebar = ({ isCollapsed, toggleSidebar }: SidebarProps) => {
   ];
 
   return (
-    <motion.aside 
+    <motion.aside
       initial={false}
       animate={{ width: isCollapsed ? 90 : 280 }}
       className="fixed left-0 top-0 h-screen bg-linear-to-b from-darker to-dark border-r border-gold/20 z-40 flex flex-col"
     >
       {/* Toggle Button */}
-      <button 
+      <button
         onClick={toggleSidebar}
         className="absolute top-6 -right-3 w-8 h-8 bg-gold rounded-full flex items-center justify-center text-dark shadow-lg hover:scale-110 transition-transform z-50"
       >
@@ -52,7 +56,7 @@ export const Sidebar = ({ isCollapsed, toggleSidebar }: SidebarProps) => {
       {/* Logo */}
       <div className={clsx("h-20 flex items-center px-6 transition-all", isCollapsed ? "justify-center" : "justify-start gap-3")}>
         <div className={clsx("w-8 h-16 rounded barber-pole shrink-0", isCollapsed && "scale-75")} />
-        
+
         <AnimatePresence>
           {!isCollapsed && (
             <motion.div
@@ -78,8 +82,8 @@ export const Sidebar = ({ isCollapsed, toggleSidebar }: SidebarProps) => {
             end={link.path === '/admin'}
             className={({ isActive }) => clsx(
               "flex items-center h-12 rounded-lg transition-all duration-300 group relative",
-              isActive 
-                ? "bg-gold/10 text-gold" 
+              isActive
+                ? "bg-gold/10 text-gold"
                 : "text-gray-400 hover:bg-white/5 hover:text-white",
               isCollapsed ? "justify-center px-0" : "px-4 gap-4"
             )}
@@ -87,7 +91,7 @@ export const Sidebar = ({ isCollapsed, toggleSidebar }: SidebarProps) => {
             {({ isActive }) => (
               <>
                 <link.icon size={22} className="shrink-0" />
-                
+
                 {!isCollapsed && (
                   <span className="font-medium whitespace-nowrap overflow-hidden flex-1">
                     {link.name}
@@ -110,10 +114,10 @@ export const Sidebar = ({ isCollapsed, toggleSidebar }: SidebarProps) => {
                     {link.name}
                   </div>
                 )}
-                
+
                 {/* Active Indicator */}
                 {isActive && (
-                   <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-gold rounded-r-full" />
+                  <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-gold rounded-r-full" />
                 )}
               </>
             )}
@@ -126,7 +130,7 @@ export const Sidebar = ({ isCollapsed, toggleSidebar }: SidebarProps) => {
           <div className="w-10 h-10 rounded-full bg-gold flex items-center justify-center text-dark font-bold shrink-0">
             AD
           </div>
-          
+
           <AnimatePresence>
             {!isCollapsed && (
               <motion.div

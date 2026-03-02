@@ -12,6 +12,15 @@ export interface Service {
   popular?: boolean;
 }
 
+export interface Product {
+  id: number;
+  name: string;
+  price: string;
+  description: string;
+  image: string;
+  inStock: boolean;
+}
+
 export interface GalleryItem {
   id: number;
   url: string;
@@ -71,6 +80,13 @@ export interface Worker {
   instagram?: string;
 }
 
+export interface MediaPanel {
+  id: number;
+  image1: string;
+  image2: string;
+  label?: string;
+}
+
 export interface SiteSettings {
   siteTitle: string;
   tagline: string;
@@ -79,6 +95,8 @@ export interface SiteSettings {
   address: string;
   instagram: string;
   facebook: string;
+  tiktok?: string;
+  twitter?: string;
 }
 
 interface DataContextType {
@@ -89,7 +107,10 @@ interface DataContextType {
   blockedTimes: BlockedTime[];
   messages: Message[];
   workers: Worker[];
-  
+  products: Product[];
+  mediaPanels: MediaPanel[];
+  settings: SiteSettings;
+
   // Service Actions
   addService: (service: Omit<Service, 'id'>) => void;
   updateService: (id: number, service: Partial<Service>) => void;
@@ -120,6 +141,14 @@ interface DataContextType {
   updateWorker: (id: number, worker: Partial<Worker>) => void;
   deleteWorker: (id: number) => void;
 
+  // Product Actions
+  addProduct: (product: Omit<Product, 'id'>) => void;
+  updateProduct: (id: number, product: Partial<Product>) => void;
+  deleteProduct: (id: number) => void;
+
+  // Media Actions
+  updateMediaPanel: (id: number, panel: Partial<MediaPanel>) => void;
+
   // Settings Actions
   updateSettings: (settings: Partial<SiteSettings>) => void;
 }
@@ -127,11 +156,18 @@ interface DataContextType {
 const DataContext = createContext<DataContextType | undefined>(undefined);
 
 // Initial Data
+const initialProducts: Product[] = [
+  { id: 1, name: "Premium Beard Oil", price: "24.99 TND", description: "Nourishing beard oil with a blend of natural oils and a cedarwood scent.", image: "https://images.unsplash.com/photo-1621607512214-68297480165e?ixlib=rb-4.0.3", inStock: true },
+  { id: 2, name: "Matte Styling Pomade", price: "19.50 TND", description: "Firm hold with a natural matte finish. Perfect for textured styles.", image: "https://images.unsplash.com/photo-1599305090598-fe179d501227?ixlib=rb-4.0.3", inStock: true },
+  { id: 3, name: "Safety Razor Kit", price: "45.00 TND", description: "Classic double-edge safety razor, including 10 replacement blades.", image: "https://images.unsplash.com/photo-1598452963314-b09f397a5c48?ixlib=rb-4.0.3", inStock: false },
+  { id: 4, name: "Aftershave Balm", price: "22.00 TND", description: "Soothing balm with aloe vera to calm skin after shaving.", image: "https://images.unsplash.com/photo-1616401784845-180882ba1c43?ixlib=rb-4.0.3", inStock: true }
+];
+
 const initialServices: Service[] = [
   {
     id: 1,
     title: "The Executive Cut",
-    price: "$45",
+    price: "45 TND",
     duration: "45 min",
     description: "Precision haircut with hot towel finish and styling consultation.",
     features: ["Consultation", "Precision Cut", "Hot Towel", "Premium Styling"]
@@ -139,7 +175,7 @@ const initialServices: Service[] = [
   {
     id: 2,
     title: "Royal Shave",
-    price: "$35",
+    price: "35 TND",
     duration: "30 min",
     description: "Traditional straight razor shave with pre-shave oil and hot towels.",
     features: ["Hot Towel Prep", "Straight Razor", "Post-Shave Balm", "Face Massage"],
@@ -148,7 +184,7 @@ const initialServices: Service[] = [
   {
     id: 3,
     title: "The Complete Package",
-    price: "$75",
+    price: "75 TND",
     duration: "75 min",
     description: "Our signature haircut combined with a royal shave and facial treatment.",
     features: ["Haircut & Style", "Royal Shave", "Mini Facial", "Beverage Service"]
@@ -156,7 +192,7 @@ const initialServices: Service[] = [
   {
     id: 4,
     title: "Beard Sculpting",
-    price: "$25",
+    price: "25 TND",
     duration: "30 min",
     description: "Expert beard trimming and shaping with line-up.",
     features: ["Beard Trim", "Line Up", "Beard Oil", "Hot Towel"]
@@ -180,16 +216,31 @@ const initialTestimonials: Testimonial[] = [
 ];
 
 const initialBookings: Booking[] = [
-    { id: 1, name: "John Doe", email: "john@email.com", service: "Classic Haircut", time: "2:00 PM", price: "$35", status: "Confirmed", initials: "JD", color: "bg-gold", date: new Date().toLocaleDateString('en-CA'), phone: "555-0101" },
-    { id: 2, name: "Mike Smith", email: "mike@email.com", service: "VIP Package", time: "4:30 PM", price: "$85", status: "Pending", initials: "MS", color: "bg-blue-500", date: new Date().toLocaleDateString('en-CA'), phone: "555-0102" },
-    { id: 3, name: "Robert Johnson", email: "robert@email.com", service: "Beard Grooming", time: "10:00 AM", price: "$25", status: "Confirmed", initials: "RJ", color: "bg-green-500", date: new Date(Date.now() + 86400000).toLocaleDateString('en-CA'), phone: "555-0103" },
-    { id: 4, name: "Alex Wilson", email: "alex@email.com", service: "Hair Design", time: "2:00 PM", price: "$50", status: "In Progress", initials: "AW", color: "bg-purple-500", date: new Date(Date.now() + 86400000).toLocaleDateString('en-CA'), phone: "555-0104" }
+  { id: 1, name: "John Doe", email: "john@email.com", service: "Classic Haircut", time: "2:00 PM", price: "35 TND", status: "Confirmed", initials: "JD", color: "bg-gold", date: new Date().toLocaleDateString('en-CA'), phone: "555-0101" },
+  { id: 2, name: "Mike Smith", email: "mike@email.com", service: "VIP Package", time: "4:30 PM", price: "85 TND", status: "Pending", initials: "MS", color: "bg-blue-500", date: new Date().toLocaleDateString('en-CA'), phone: "555-0102" },
+  { id: 3, name: "Robert Johnson", email: "robert@email.com", service: "Beard Grooming", time: "10:00 AM", price: "25 TND", status: "Confirmed", initials: "RJ", color: "bg-green-500", date: new Date(Date.now() + 86400000).toLocaleDateString('en-CA'), phone: "555-0103" },
+  { id: 4, name: "Alex Wilson", email: "alex@email.com", service: "Hair Design", time: "2:00 PM", price: "50 TND", status: "In Progress", initials: "AW", color: "bg-purple-500", date: new Date(Date.now() + 86400000).toLocaleDateString('en-CA'), phone: "555-0104" }
 ];
 
 const initialWorkers: Worker[] = [
   { id: 1, name: "Haykel Barber", role: "Master Barber & Founder", image: "https://images.unsplash.com/photo-1583900985315-953be81153bc?ixlib=rb-4.0.3", bio: "With over 15 years of experience, Haykel specializes in classic cuts and modern styling.", instagram: "haykelbarber" },
   { id: 2, name: "James Miller", role: "Senior Stylist", image: "https://images.unsplash.com/photo-1595152772835-219674b2a8a6?ixlib=rb-4.0.3", bio: "Expert in beard grooming and hot towel shaves. James ensures every client leaves looking sharp.", instagram: "jamescuts" },
   { id: 3, name: "Sarah Jenkins", role: "Color Specialist", image: "https://images.unsplash.com/photo-1607990281513-2c110a25bd8c?ixlib=rb-4.0.3", bio: "Bringing creativity to every cut, Sarah is our go-to for hair coloring and designs.", instagram: "sarahstyles" }
+];
+
+const initialMediaPanels: MediaPanel[] = [
+  {
+    id: 1,
+    image1: 'https://images.unsplash.com/photo-1585747860715-2ba37e788b70?ixlib=rb-4.0.3',
+    image2: 'https://images.unsplash.com/photo-1599351431202-1e0f0137899a?ixlib=rb-4.0.3',
+    label: 'Before & After'
+  },
+  {
+    id: 2,
+    image1: 'https://images.unsplash.com/photo-1621605815971-fbc98d665033?ixlib=rb-4.0.3',
+    image2: 'https://images.unsplash.com/photo-1622286342621-4bd786c2447c?ixlib=rb-4.0.3',
+    label: 'Our Work'
+  }
 ];
 
 const initialSettings: SiteSettings = {
@@ -240,6 +291,16 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     return saved ? JSON.parse(saved) : initialWorkers;
   });
 
+  const [products, setProducts] = useState<Product[]>(() => {
+    const saved = localStorage.getItem('products');
+    return saved ? JSON.parse(saved) : initialProducts;
+  });
+
+  const [mediaPanels, setMediaPanels] = useState<MediaPanel[]>(() => {
+    const saved = localStorage.getItem('mediaPanels');
+    return saved ? JSON.parse(saved) : initialMediaPanels;
+  });
+
   const [settings, setSettings] = useState<SiteSettings>(() => {
     const saved = localStorage.getItem('settings');
     return saved ? JSON.parse(saved) : initialSettings;
@@ -253,6 +314,8 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   useEffect(() => localStorage.setItem('blockedTimes', JSON.stringify(blockedTimes)), [blockedTimes]);
   useEffect(() => localStorage.setItem('messages', JSON.stringify(messages)), [messages]);
   useEffect(() => localStorage.setItem('workers', JSON.stringify(workers)), [workers]);
+  useEffect(() => localStorage.setItem('products', JSON.stringify(products)), [products]);
+  useEffect(() => localStorage.setItem('mediaPanels', JSON.stringify(mediaPanels)), [mediaPanels]);
   useEffect(() => localStorage.setItem('settings', JSON.stringify(settings)), [settings]);
 
   // Sync with other tabs
@@ -261,6 +324,8 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       if (e.key === 'bookings' && e.newValue) setBookings(JSON.parse(e.newValue));
       if (e.key === 'blockedTimes' && e.newValue) setBlockedTimes(JSON.parse(e.newValue));
       if (e.key === 'workers' && e.newValue) setWorkers(JSON.parse(e.newValue));
+      if (e.key === 'products' && e.newValue) setProducts(JSON.parse(e.newValue));
+      if (e.key === 'mediaPanels' && e.newValue) setMediaPanels(JSON.parse(e.newValue));
       if (e.key === 'settings' && e.newValue) setSettings(JSON.parse(e.newValue));
     };
     window.addEventListener('storage', handleStorageChange);
@@ -317,7 +382,7 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     const initials = booking.name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2);
     const colors = ['bg-gold', 'bg-blue-500', 'bg-green-500', 'bg-purple-500', 'bg-red-500'];
     const color = colors[Math.floor(Math.random() * colors.length)];
-    
+
     const newBooking: Booking = {
       ...booking,
       id: Date.now(),
@@ -379,6 +444,23 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     setWorkers(workers.filter(w => w.id !== id));
   };
 
+  const addProduct = (product: Omit<Product, 'id'>) => {
+    const newProduct = { ...product, id: Date.now() };
+    setProducts([...products, newProduct]);
+  };
+
+  const updateProduct = (id: number, updatedProduct: Partial<Product>) => {
+    setProducts(products.map(p => p.id === id ? { ...p, ...updatedProduct } : p));
+  };
+
+  const deleteProduct = (id: number) => {
+    setProducts(products.filter(p => p.id !== id));
+  };
+
+  const updateMediaPanel = (id: number, updatedPanel: Partial<MediaPanel>) => {
+    setMediaPanels(mediaPanels.map(p => p.id === id ? { ...p, ...updatedPanel } : p));
+  };
+
   const updateSettings = (updatedSettings: Partial<SiteSettings>) => {
     setSettings({ ...settings, ...updatedSettings });
   };
@@ -392,6 +474,8 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       blockedTimes,
       messages,
       workers,
+      products,
+      mediaPanels,
       settings,
       addService,
       updateService,
@@ -411,6 +495,10 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       addWorker,
       updateWorker,
       deleteWorker,
+      addProduct,
+      updateProduct,
+      deleteProduct,
+      updateMediaPanel,
       updateSettings
     }}>
       {children}

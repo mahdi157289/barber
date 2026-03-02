@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Menu, X, Scissors, Calendar } from 'lucide-react';
+import { Menu, X, Calendar } from 'lucide-react';
+import logo from '../../assets/factory coif logo.jpg';
 import { motion, AnimatePresence } from 'framer-motion';
 import clsx from 'clsx';
 import { Button } from '../common/Button';
@@ -85,13 +86,13 @@ export const Navbar = () => {
         >
           {/* Logo - Left Side */}
           <Link to="/" className={clsx("flex items-center gap-2 group", isScrolled && "hidden")}>
-             <div className="relative w-8 h-8 overflow-hidden rounded bg-gold/10 border border-gold/50 group-hover:border-gold transition-colors">
-                <div className="absolute inset-0 bg-[linear-gradient(45deg,transparent_25%,rgba(201,162,39,0.5)_50%,transparent_75%)] bg-[length:200%_200%] animate-[shimmer_2s_infinite]" />
-                <Scissors className="w-full h-full p-1 text-gold" />
-             </div>
-             <span className="font-serif font-bold text-xl tracking-wider text-white transition-all duration-500 opacity-100 w-auto">
-               {titleFirst} <span className="text-gold">{titleRest}</span>
-             </span>
+            <div className="relative w-12 h-12 overflow-hidden rounded bg-gold/10 border border-gold/50 group-hover:border-gold transition-colors">
+              <div className="absolute inset-0 bg-[linear-gradient(45deg,transparent_25%,rgba(201,162,39,0.5)_50%,transparent_75%)] bg-[length:200%_200%] animate-[shimmer_2s_infinite]" />
+              <img src={logo} alt="Logo" className="w-full h-full object-cover" />
+            </div>
+            <span className="font-serif font-bold text-xl tracking-wider text-white transition-all duration-500 opacity-100 w-auto">
+              {titleFirst} <span className="text-gold">{titleRest}</span>
+            </span>
           </Link>
 
           {/* Desktop Nav */}
@@ -141,7 +142,7 @@ export const Navbar = () => {
                     )} />
                   </a>
                 ))}
-                
+
                 <Link to="/" className="font-serif font-bold text-xl tracking-wider text-white px-4 hover:scale-105 transition-transform">
                   ELITE <span className="text-gold">CUTS</span>
                 </Link>
@@ -167,44 +168,44 @@ export const Navbar = () => {
           </div>
 
           {/* Mobile Menu Button */}
-        <button
-          className="md:hidden text-white hover:text-gold transition-colors"
-          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-        >
-          {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
-      </div>
-
-      {/* Mobile Menu Overlay */}
-      <AnimatePresence>
-        {isMobileMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: '100vh' }}
-            exit={{ opacity: 0, height: 0 }}
-            className="md:hidden absolute top-full left-0 w-full bg-darker border-b border-gold/10 overflow-hidden"
+          <button
+            className="md:hidden text-white hover:text-gold transition-colors"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           >
-            <div className="flex flex-col items-center justify-center h-full gap-8 p-8">
-              {navLinks.map((item) => (
-                <a
-                  key={item.name}
-                  href={item.path}
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="text-2xl font-serif text-white hover:text-gold transition-colors"
-                >
-                  {item.name}
-                </a>
-              ))}
-              <div className="mt-8">
-                <div onClick={() => { setIsMobileMenuOpen(false); (document.getElementById('booking-modal') as HTMLDialogElement)?.showModal(); }}>
-                  <Button variant="primary">Book Now</Button>
+            {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+        </div>
+
+        {/* Mobile Menu Overlay */}
+        <AnimatePresence>
+          {isMobileMenuOpen && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: '100vh' }}
+              exit={{ opacity: 0, height: 0 }}
+              className="md:hidden absolute top-full left-0 w-full bg-darker border-b border-gold/10 overflow-hidden"
+            >
+              <div className="flex flex-col items-center justify-center h-full gap-8 p-8">
+                {navLinks.map((item) => (
+                  <a
+                    key={item.name}
+                    href={item.path}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="text-2xl font-serif text-white hover:text-gold transition-colors"
+                  >
+                    {item.name}
+                  </a>
+                ))}
+                <div className="mt-8">
+                  <div onClick={() => { setIsMobileMenuOpen(false); (document.getElementById('booking-modal') as HTMLDialogElement)?.showModal(); }}>
+                    <Button variant="primary">Book Now</Button>
+                  </div>
                 </div>
               </div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </nav>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </nav>
     </>
   );
 };

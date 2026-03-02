@@ -32,8 +32,8 @@ export const BookingModal = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    const price = formData.service.split(' - ')[1] || "$0";
-    
+    const price = formData.service.split(' - ')[1] || "0 TND";
+
     // Add booking to context
     addBooking({
       name: formData.name,
@@ -71,8 +71,8 @@ export const BookingModal = () => {
   });
 
   return (
-    <dialog 
-      id="booking-modal" 
+    <dialog
+      id="booking-modal"
       ref={dialogRef}
       className="m-auto bg-transparent backdrop:bg-black/80 p-0 rounded-2xl shadow-2xl w-full max-w-2xl open:animate-in open:fade-in open:zoom-in-95 backdrop:animate-in backdrop:fade-in"
       onClick={(e) => {
@@ -80,7 +80,7 @@ export const BookingModal = () => {
       }}
     >
       <div className="bg-linear-to-br from-[#1a1a1a] to-[#0d0d0d] border border-gold/20 rounded-2xl overflow-hidden relative text-white">
-        <button 
+        <button
           onClick={close}
           className="absolute top-4 right-4 text-gray-400 hover:text-white z-10 p-2 hover:bg-white/10 rounded-full transition-colors"
         >
@@ -93,7 +93,7 @@ export const BookingModal = () => {
             <div>
               <h2 className="text-2xl font-serif text-gold mb-2">{t('booking.title')}</h2>
               <p className="text-gray-400 text-sm">{t('booking.step', { step })}</p>
-              
+
               <div className="mt-8 space-y-4">
                 <div className={`flex items-center gap-3 ${step >= 1 ? 'text-white' : 'text-gray-600'}`}>
                   <div className={`w-8 h-8 rounded-full flex items-center justify-center border ${step >= 1 ? 'border-gold bg-gold/10 text-gold' : 'border-gray-700 bg-transparent'}`}>1</div>
@@ -109,7 +109,7 @@ export const BookingModal = () => {
                 </div>
               </div>
             </div>
-            
+
             <div className="mt-8 pt-8 border-t border-gold/10">
               <p className="text-xs text-gray-500">
                 {t('booking.help')}<br />
@@ -123,7 +123,7 @@ export const BookingModal = () => {
             <form onSubmit={handleSubmit} className="h-full flex flex-col">
               <div className="flex-1">
                 {step === 1 && (
-                  <motion.div 
+                  <motion.div
                     initial={{ opacity: 0, x: 20 }}
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: -20 }}
@@ -133,26 +133,25 @@ export const BookingModal = () => {
                       <Scissors className="text-gold" size={20} />
                       {t('booking.selectService')}
                     </h3>
-                    
+
                     <div className="space-y-3">
                       {services.map((service) => {
                         // @ts-ignore
-                        const serviceLabel = `${t(`booking.servicesList.${service.id}`)} - $${service.price}`;
+                        const serviceLabel = `${t(`booking.servicesList.${service.id}`)} - ${service.price} TND`;
                         return (
-                          <label 
+                          <label
                             key={service.id}
-                            className={`block p-4 rounded-lg border cursor-pointer transition-all ${
-                              formData.service === serviceLabel 
-                                ? 'border-gold bg-gold/10' 
-                                : 'border-white/10 hover:border-gold/50 hover:bg-white/5'
-                            }`}
+                            className={`block p-4 rounded-lg border cursor-pointer transition-all ${formData.service === serviceLabel
+                              ? 'border-gold bg-gold/10'
+                              : 'border-white/10 hover:border-gold/50 hover:bg-white/5'
+                              }`}
                           >
-                            <input 
-                              type="radio" 
-                              name="service" 
+                            <input
+                              type="radio"
+                              name="service"
                               value={serviceLabel}
                               checked={formData.service === serviceLabel}
-                              onChange={(e) => setFormData({...formData, service: e.target.value})}
+                              onChange={(e) => setFormData({ ...formData, service: e.target.value })}
                               className="hidden"
                             />
                             <span className="text-sm font-medium">{serviceLabel}</span>
@@ -166,21 +165,21 @@ export const BookingModal = () => {
                         <Calendar className="text-gold" size={20} />
                         {t('booking.selectDate')}
                       </h3>
-                      
+
                       <div className="flex gap-3 overflow-x-auto pb-4 scrollbar-thin scrollbar-thumb-gold/20 scrollbar-track-white/5">
                         {next14Days.map((date) => {
                           const dateStr = date.toLocaleDateString('en-CA');
                           const isSelected = formData.date === dateStr;
-                          
+
                           return (
                             <button
                               key={dateStr}
                               type="button"
-                              onClick={() => setFormData({...formData, date: dateStr, time: ''})}
+                              onClick={() => setFormData({ ...formData, date: dateStr, time: '' })}
                               className={clsx(
                                 "min-w-[80px] p-3 rounded-xl border transition-all flex flex-col items-center gap-1",
-                                isSelected 
-                                  ? "bg-gold border-gold text-dark" 
+                                isSelected
+                                  ? "bg-gold border-gold text-dark"
                                   : "bg-white/5 border-white/10 text-gray-400 hover:bg-white/10 hover:border-gold/30"
                               )}
                             >
@@ -195,7 +194,7 @@ export const BookingModal = () => {
                 )}
 
                 {step === 2 && (
-                  <motion.div 
+                  <motion.div
                     initial={{ opacity: 0, x: 20 }}
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: -20 }}
@@ -204,23 +203,23 @@ export const BookingModal = () => {
                       <Clock className="text-gold" size={20} />
                       {t('booking.selectTime')}
                     </h3>
-                    
+
                     <div className="grid grid-cols-3 gap-3">
                       {timeSlots.map((time) => {
                         const isAvailable = isTimeSlotAvailable(formData.date, time);
                         const isSelected = formData.time === time;
-                        
+
                         return (
                           <button
                             key={time}
                             type="button"
                             disabled={!isAvailable}
-                            onClick={() => setFormData({...formData, time})}
+                            onClick={() => setFormData({ ...formData, time })}
                             className={clsx(
                               "p-3 rounded-lg border text-sm font-medium transition-all relative overflow-hidden",
                               isSelected
                                 ? "border-gold bg-gold text-dark"
-                                : isAvailable 
+                                : isAvailable
                                   ? "border-white/10 hover:border-gold/50 hover:bg-white/5 text-white"
                                   : "border-red-500/20 bg-red-500/10 text-red-500/50 cursor-not-allowed"
                             )}
@@ -239,7 +238,7 @@ export const BookingModal = () => {
                 )}
 
                 {step === 3 && (
-                  <motion.div 
+                  <motion.div
                     initial={{ opacity: 0, x: 20 }}
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: -20 }}
@@ -249,37 +248,37 @@ export const BookingModal = () => {
                       <User className="text-gold" size={20} />
                       {t('booking.steps.details')}
                     </h3>
-                    
+
                     <div className="space-y-4">
                       <div>
                         <label className="block text-sm text-gray-400 mb-1">{t('booking.form.name')}</label>
-                        <input 
-                          type="text" 
+                        <input
+                          type="text"
                           required
                           value={formData.name}
-                          onChange={(e) => setFormData({...formData, name: e.target.value})}
+                          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                           className="w-full bg-dark border border-white/10 rounded-lg p-3 text-white focus:border-gold focus:outline-none"
                           placeholder={t('contact.form.placeholders.name')}
                         />
                       </div>
                       <div>
                         <label className="block text-sm text-gray-400 mb-1">{t('booking.form.phone')}</label>
-                        <input 
-                          type="tel" 
+                        <input
+                          type="tel"
                           required
                           value={formData.phone}
-                          onChange={(e) => setFormData({...formData, phone: e.target.value})}
+                          onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                           className="w-full bg-dark border border-white/10 rounded-lg p-3 text-white focus:border-gold focus:outline-none"
                           placeholder={t('contact.form.placeholders.phone')}
                         />
                       </div>
                       <div>
                         <label className="block text-sm text-gray-400 mb-1">{t('booking.form.email')}</label>
-                        <input 
-                          type="email" 
+                        <input
+                          type="email"
                           required
                           value={formData.email}
-                          onChange={(e) => setFormData({...formData, email: e.target.value})}
+                          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                           className="w-full bg-dark border border-white/10 rounded-lg p-3 text-white focus:border-gold focus:outline-none"
                           placeholder={t('contact.form.placeholders.email')}
                         />
@@ -297,11 +296,11 @@ export const BookingModal = () => {
                 ) : (
                   <div></div>
                 )}
-                
+
                 {step < 3 ? (
-                  <Button 
-                    variant="primary" 
-                    onClick={handleNext} 
+                  <Button
+                    variant="primary"
+                    onClick={handleNext}
                     type="button"
                     disabled={
                       (step === 1 && (!formData.service || !formData.date)) ||
