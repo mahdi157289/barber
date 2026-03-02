@@ -64,7 +64,7 @@ export const Hero = () => {
               initial={{ scale: 0.8, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{ delay: 0.2, duration: 0.5 }}
-              className="w-20 h-20 md:w-24 md:h-24 rounded-2xl overflow-hidden border-2 border-gold/50 shadow-[0_0_30px_rgba(201,162,39,0.3)] shrink-0"
+              className="w-20 h-20 md:w-24 md:h-24 rounded-2xl overflow-hidden shrink-0"
             >
               <img src={logo} alt="Elite Cuts Logo" className="w-full h-full object-cover" />
             </motion.div>

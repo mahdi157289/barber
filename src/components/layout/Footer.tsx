@@ -2,6 +2,7 @@ import React from 'react';
 import { Scissors, MapPin, Phone, Mail, Facebook, Instagram, Twitter, Clock } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useData } from '../../context/DataContext';
+import logo from '../../assets/factory coif logo.jpg';
 
 export const Footer = () => {
   const { settings } = useData();
@@ -13,20 +14,19 @@ export const Footer = () => {
   return (
     <footer className="pt-16 pb-8 px-6 bg-[#050505] border-t border-gold/20">
       <div className="max-w-7xl mx-auto">
-        
+
         {/* Top Section: Logo and Social Icons (Centered) */}
         <div className="flex flex-col items-center mb-12">
-          {/* Logo */}
           <div className="flex items-center gap-4 mb-6">
-            <div className="w-8 h-8 flex items-center justify-center bg-gold rounded text-dark">
-              <Scissors size={20} />
+            <div className="w-10 h-10 overflow-hidden rounded-lg">
+              <img src={logo} alt="Logo" className="w-full h-full object-cover" />
             </div>
             <span className="text-4xl font-bold font-serif text-white">{titleFirst} <span className="text-gold">{titleRest}</span></span>
           </div>
           <p className="text-gray-500 mb-8 leading-relaxed text-center max-w-xl">
             {settings.tagline}
           </p>
-          
+
           {/* Social Icons with Golden Effect */}
           <div className="flex gap-4">
             {settings.facebook && (

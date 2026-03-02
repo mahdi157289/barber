@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Menu, X, Calendar } from 'lucide-react';
+import { Menu, X, Calendar, ShoppingBag } from 'lucide-react';
 import logo from '../../assets/factory coif logo.jpg';
 import { motion, AnimatePresence } from 'framer-motion';
 import clsx from 'clsx';
@@ -54,19 +54,29 @@ export const Navbar = () => {
 
   return (
     <>
-      {/* Fixed Right Book Button - Visible on Scroll */}
-      <button
-        onClick={() => (document.getElementById('booking-modal') as HTMLDialogElement)?.showModal()}
+      {/* Fixed Right Actions - Visible on Scroll */}
+      <div
         className={clsx(
-          "fixed right-0 top-1/2 -translate-y-1/2 z-50 transition-all duration-500 transform origin-right cursor-pointer",
+          "fixed right-0 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-2 transition-all duration-500 transform origin-right",
           isScrolled ? "translate-x-0 opacity-100" : "translate-x-full opacity-0 pointer-events-none"
         )}
       >
-        <div className="bg-gold text-dark font-bold text-xs py-6 px-4 rounded-l-lg shadow-[0_0_20px_rgba(201,162,39,0.3)] hover:shadow-[0_0_30px_rgba(201,162,39,0.5)] hover:bg-white transition-all flex flex-col items-center gap-3 border-l border-t border-b border-white/20 backdrop-blur-sm">
+        <button
+          onClick={() => (document.getElementById('booking-modal') as HTMLDialogElement)?.showModal()}
+          className="bg-gold text-dark font-bold text-xs py-6 px-4 rounded-l-lg shadow-[0_0_20px_rgba(201,162,39,0.3)] hover:shadow-[0_0_30px_rgba(201,162,39,0.5)] hover:bg-white transition-all flex flex-col items-center gap-3 border-l border-t border-b border-white/20 backdrop-blur-sm cursor-pointer"
+        >
           <Calendar size={18} className="text-dark" />
           <span className="[writing-mode:vertical-rl] rotate-180 uppercase tracking-widest whitespace-nowrap">{t('common.bookNow')}</span>
-        </div>
-      </button>
+        </button>
+
+        <button
+          onClick={() => document.getElementById('products')?.scrollIntoView({ behavior: 'smooth' })}
+          className="bg-darker/80 text-gold font-bold text-xs py-6 px-4 rounded-l-lg shadow-[0_0_20px_rgba(0,0,0,0.5)] hover:bg-gold hover:text-dark transition-all flex flex-col items-center gap-3 border-l border-t border-b border-gold/40 backdrop-blur-md cursor-pointer group"
+        >
+          <ShoppingBag size={18} className="group-hover:scale-110 transition-transform" />
+          <span className="[writing-mode:vertical-rl] rotate-180 uppercase tracking-widest whitespace-nowrap">Store</span>
+        </button>
+      </div>
 
       <nav
         className={clsx(
@@ -86,8 +96,7 @@ export const Navbar = () => {
         >
           {/* Logo - Left Side */}
           <Link to="/" className={clsx("flex items-center gap-2 group", isScrolled && "hidden")}>
-            <div className="relative w-12 h-12 overflow-hidden rounded bg-gold/10 border border-gold/50 group-hover:border-gold transition-colors">
-              <div className="absolute inset-0 bg-[linear-gradient(45deg,transparent_25%,rgba(201,162,39,0.5)_50%,transparent_75%)] bg-[length:200%_200%] animate-[shimmer_2s_infinite]" />
+            <div className="relative w-12 h-12 overflow-hidden rounded-lg">
               <img src={logo} alt="Logo" className="w-full h-full object-cover" />
             </div>
             <span className="font-serif font-bold text-xl tracking-wider text-white transition-all duration-500 opacity-100 w-auto">
@@ -144,8 +153,7 @@ export const Navbar = () => {
                 ))}
 
                 <Link to="/" className="flex items-center gap-3 px-6 group transition-transform hover:scale-105 shrink-0">
-                  <div className="relative w-10 h-10 overflow-hidden rounded bg-gold/10 border border-gold/50 group-hover:border-gold transition-colors">
-                    <div className="absolute inset-0 bg-[linear-gradient(45deg,transparent_25%,rgba(201,162,39,0.5)_50%,transparent_75%)] bg-[length:200%_200%] animate-[shimmer_2s_infinite]" />
+                  <div className="relative w-10 h-10 overflow-hidden rounded-lg">
                     <img src={logo} alt="Logo" className="w-full h-full object-cover" />
                   </div>
                   <span className="font-serif font-bold text-lg tracking-widest text-white uppercase">
